@@ -1,0 +1,329 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% File: thesis.tex, version 0.1, May 2010
+%%%
+%%% =============================================
+%%% This file contains a template that can be used with the package
+%%% cs.sty and LaTeX2e to produce a thesis that meets the requirements
+%%% of the Computer Science Department from the Technical University of Cluj-Napoca
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt,a4paper,twoside,openright]{report}
+
+\usepackage{cs}
+
+% !!!!!!!!!!!!!!!!!!!!!!!!!!!! IMPORTANT NOTE !!!!!!!!!!!!!!!!!!!!!!!
+% FOR THESIS IN ROMANIAN LANGUAGE COMMENT OUT THE FOLLOWING LINE !!!!
+% \usepackage[english,romanian]{babel}
+
+
+\graphicspath{{figures/}}
+\ifpdf
+  \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  \DeclareGraphicsExtensions{.eps}
+\fi
+
+% \mastersthesis
+\diplomathesis
+\leftchapter
+% \centerchapter
+% \rightchapter
+\singlespace
+% \oneandhalfspace
+% \doublespace
+
+\renewcommand{\thesisauthor}{Graduate's Firstname and Familyname}    %% Your name.
+\renewcommand{\thesismonth}{February/June/September}     %% Your month of graduation.
+\renewcommand{\thesisyear}{2015}      %% Your year of graduation.
+\renewcommand{\thesistitle}{Your License Thesis' Title}
+
+\renewcommand{\thesissupervisorname}{Your Supervisor's scientific title and name}
+
+
+%\renewcommand{\thesisdedication}{To my beloved wife and parents}
+
+\begin{document}
+
+
+% ================================================================================
+% ======================== FIRST TITLE PAGE =====================================
+% ================================================================================
+
+\begin{titlepage}
+
+\thispagestyle{firststylewithoutfooter}
+
+% \fancyhead{}
+% \fancyhead[C]{\includegraphics[width=20pt]{header-utcn-engleza.png}}
+% \chead{\includegraphics[width=20pt]{header-utcn-engleza.png}}
+
+
+\begin{center}
+% {\scshape \universitynameenglish} \\
+{\scshape \facultynameenglish} \\
+{\scshape \departmentnameenglish} \\
+
+% {\scshape \universitynameromanian} \\
+% {\scshape \facultynameromanian} \\
+% {\scshape \departmentnameromanian} \\
+
+
+\vspace{6cm}
+
+\thesistitlesize {\textbf{\thesistitle}\\}
+\vspace {1cm}
+
+\thesistypesize \textbf{\thesistypeenglish}\\
+% \Large \textbf{\thesistyperomanian}\\
+
+
+\vspace{2cm}
+
+\thesisauthortypesize \thesisauthortypeenglish \\ \textbf{\thesisauthor} \\
+% \thesisauthortypesize \thesisauthortyperomanian \\ \textbf{\thesisauthor} \\
+
+\vspace{1cm}
+
+\thesissupervisorsize \thesissupervisorenglish \\ \textbf{\thesissupervisorname}\\
+% \thesissupervisorsize \thesissupervisorromanian \\ \textbf{\thesissupervisorname}\\
+
+
+
+\vspace{\stretch{1}}
+{\thesismonth} {\thesisyear} \\
+\end{center}
+\end{titlepage}
+
+\begin{titlepage}
+\phantom{1}
+\end{titlepage}
+
+
+% ================================================================================
+% ======================== SECOND TITLE PAGE =====================================
+% ================================================================================
+
+\begin{titlepage}
+
+\begin{center}
+
+\thispagestyle{firststylewithfooter}
+
+% {\scshape \universitynameenglish} \\
+{\scshape \facultynameenglish} \\
+{\scshape \departmentnameenglish} \\
+
+% {\scshape \universitynameromanian} \\
+% {\scshape \facultynameromanian} \\
+% {\scshape \departmentnameromanian} \\
+
+\vspace{1cm}
+
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}%
+\begin{tabularx}{\textwidth}{lR}
+{\scshape \facultydeanenglish} & {\scshape \deptmanagerenglish} \\
+% {\scshape \facultydeanromanian} & {\scshape \deptmanagerromanian} \\
+\facultydeanname & \deptmanagername\\
+\end{tabularx}
+
+\vspace {2cm}
+
+\thesistitlesize {\textbf{\thesistitle}\\}
+\vspace {1cm}
+
+\thesistypesize \textbf{\thesistypeenglish}\\
+% \Large \textbf{\thesistyperomanian}\\
+
+\vspace{1cm}
+
+\end{center}
+
+% \vspace{1cm}
+
+\begin{flushleft}
+\begin{enumerate}
+  \item \textbf{\thesisauthortypeenglish}: \thesisauthor
+%   \item \thesisauthortyperomanian: \thesisauthor
+ 
+ \item \textbf{\thesissupervisorenglish}: \thesissupervisorname
+%  \item \thesissupervisorromanian: \thesissupervisorname
+ 
+ \item \textbf{\thesiscontentsenglish}: Thesis presentation, suprvisior evaluation, chapter 1, chapter 2, \dots, chapter n, References, Anexes, CD.
+%  \item \thesiscontentsromanian: Pagina de prezentare, aprecierile coordonatorului, titlul capitolului 1, titlul capitolului 2, \dots, titlul capitolului n, bibliografie, anexe, CD.
+ 
+ \item \textbf{\thesisworkingplaceenglish}: UTCN, Cluj-Napoca
+%  \item \thesisworkingplaceromanian: UTCN, Cluj-Napoca
+
+ \item \textbf{\thesisadvisorsenglish}: Donald Knuth, Leslie Lamport, others \dots
+%  \item \thesisadvisorsromanian: Donald Knuth, Leslie Lamport, others \dots
+
+ \item \textbf{\thesisbegindateenglish}: \dotfill
+%  \item \thesisbegindateromanian: \dotfill
+
+ \item \textbf{\thesisenddateenglish}: \dotfill
+%  \item \thesisenddateromanian: \dotfill
+
+\end{enumerate}
+
+\end{flushleft}
+
+\vspace{0.5cm}
+
+\begin{center}
+
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}%
+\begin{tabularx}{\textwidth}{lR}
+{\thesissignatureenglish} {\thesissupervisorenglish} & {\thesissignatureenglish} {\thesisauthortypeenglish} \\
+% {\thesissignatureromanian} {\thesissupervisorromanian} & {\thesissignatureromanian} {\thesisauthortyperomanian} \\
+\thesissupervisorname & \thesisauthor \\
+\end{tabularx}
+
+\vspace{\stretch{1}}
+{\thesismonth} {\thesisyear} \\
+
+\end{center}
+
+\end{titlepage}
+
+
+\begin{titlepage}
+\phantom{1}
+\end{titlepage}
+
+
+% ================================================================================
+% ======================== THIRD TITLE PAGE =====================================
+% ================================================================================
+
+\begin{titlepage}
+
+\begin{center}
+\thispagestyle{firststylewithfooter}
+
+% {\scshape \universitynameenglish} \\
+{\scshape \facultynameenglish} \\
+{\scshape \departmentnameenglish} \\
+
+% {\scshape \universitynameromanian} \\
+% {\scshape \facultynameromanian} \\
+% {\scshape \departmentnameromanian} \\
+\end{center}
+
+\vspace{3cm}
+
+\begin{center}
+\autheticitydeclarationsize \textbf{\autheticitydeclarationenglish}
+% \autheticitydeclarationsize \textbf{\autheticitydeclarationromanian}
+\end{center}
+
+\vspace{1cm}
+
+Subsemnatul \textit{\thesisauthor}, legitimat cu \textit{CI/BI} seria \textit{XX} numărul \textit{NNNNNN}, CNP \textit{LLLLLLLLLLLL}, autorul lucrării \textit{\thesistitle} elaborată în vederea susținerii examenului de finalizare a studiilor de masterat la Facultatea de Automatică și Calculatoare, Departamentul Calculatoare, Specializarea \textit{SSSSSSSS} din cadrul Universității Tehnice din Cluj-Napoca, sesiunea \textit{\thesismonth} a anului univeristar \textit{20XX/20XX}, declar pe proprie răspundere, că această lucrare este rezultatul propriei mele activități intelectuale, pe baza cercetărilor mele și pe baza informatiilor obținute din surse care au fost citate în textul lucrării și în bibliografie.
+
+Declar că această lucrare nu conține porțiuni plagiate, iar sursele bibliografice au fost folosite cu respectarea legislației române și a convențiilor internaționale privind drepturile de autor.
+
+Declar, de asemenea, că această lucrare  nu a mai fost prezentată în fața unei alte comisii de examen de licență sau disertație.
+
+În cazul constatării ulterioare a unor declarații false, voi suporta sancțiunile administrative, respectiv, \textit{anularea examenului de disertație}.
+
+
+\vspace{2cm}
+
+\begin{center}
+
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}%
+\begin{tabularx}{\textwidth}{lR}
+Cluj-Napoca & {\thesissignatureenglish{ }\thesisauthortypeenglish}\\
+date  & {\thesisauthor} \\
+% Cluj-Napoca & {\thesissignatureromanian}\\
+% data  & {\thesisauthortyperomanian} \\ 
+\end{tabularx}
+
+\end{center}
+
+
+\end{titlepage}
+
+
+\begin{titlepage}
+\phantom{1}
+\end{titlepage}
+
+
+%\pagestyle{headings}
+
+% ABSTRACT
+\begin{abstract}
+ Descrierea sumară a lucrării, în câteva fraze.
+\end{abstract}
+
+\begin{titlepage}
+\phantom{1}
+\end{titlepage}
+
+
+
+%\thesistitle                    %% Generate the title page.
+%\authordeclarationpage                %% Generate the declaration page.
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\tableofcontents
+\newpage
+
+\listoftables
+\listoffigures
+
+\clearpage
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% \pagestyle{normalpagestyle}
+% \pagestyle{fancy}
+% \fancyhf{}
+
+\setlength{\headheight}{15pt}
+
+% \fancypagestyle{fancy}{}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{ \markboth{#1}{} }
+\renewcommand{\sectionmark}[1]{ \markright{#1}{} }
+
+\renewcommand{\headrulewidth}{2pt} % remove lines as well
+\renewcommand{\footrulewidth}{2pt}
+
+\fancyhf{}
+% \fancyhead[LE,RO]{\thepage}
+\fancyhead[RE]{\textit{ \nouppercase{\leftmark}} }
+\fancyhead[LO]{\textit{ \nouppercase{\rightmark}} }
+\fancyfoot[L]{{\thesismonth} {\thesisyear}}
+\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
+
+\fancypagestyle{plain}{ %
+  \fancyhf{} % remove everything
+  \renewcommand{\headrulewidth}{0pt} % remove lines as well
+  \renewcommand{\footrulewidth}{0pt}
+  \lfoot{{\thesismonth} {\thesisyear}}
+  \rfoot{Page \thepage\ of \pageref{LastPage}}
+}
+
+\include{ch1}
+\include{ch2}
+\include{ch3}
+\include{ch4}
+\include{ch5}
+\include{ch6}
+% \include{ch7}
+% \include{ch8}
+
+%\addcontentsline {toc}{chapter}{Bibliography}
+\bibliographystyle{IEEEtran}
+\bibliography{thesis}%same file name as for .bib
+
+\include{apendix}
+
+\end{document}
