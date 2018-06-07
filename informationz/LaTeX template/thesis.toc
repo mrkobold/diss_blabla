@@ -1,0 +1,29 @@
+\select@language {romanian}
+\contentsline {chapter}{List\u {a} de tabele}{iii}{chapter*.2}
+\contentsline {chapter}{List\u {a} de figuri}{v}{chapter*.3}
+\contentsline {chapter}{\numberline {1}Introducere}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Context}{1}{section.1.1}
+\contentsline {section}{\numberline {1.2}Motiva\IeC {{\textcommabelow t}}ie}{1}{section.1.2}
+\contentsline {section}{\numberline {1.3}Structura lucr\IeC {\u a}rii}{2}{section.1.3}
+\contentsline {chapter}{\numberline {2}Obiective \IeC {{\textcommabelow s}}i specifica\IeC {{\textcommabelow t}}ii}{3}{chapter.2}
+\contentsline {section}{\numberline {2.1}Obiective}{3}{section.2.1}
+\contentsline {section}{\numberline {2.2}Specifica\IeC {{\textcommabelow t}}ii}{3}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Specifica\IeC {{\textcommabelow t}}ii func\IeC {{\textcommabelow t}}ionale}{3}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Specifica\IeC {{\textcommabelow t}}ii non-func\IeC {{\textcommabelow t}}ionale}{4}{subsection.2.2.2}
+\contentsline {chapter}{\numberline {3}Studiu bibliografic}{5}{chapter.3}
+\contentsline {section}{\numberline {3.1}Abord\IeC {\u a}ri similare}{5}{section.3.1}
+\contentsline {section}{\numberline {3.2}Tehnici/Tehnologii/Surse folosite}{5}{section.3.2}
+\contentsline {chapter}{\numberline {4}Fundamente teoretice}{7}{chapter.4}
+\contentsline {chapter}{\numberline {5}Prezentarea contribu\IeC {{\textcommabelow t}}iilor autorului}{9}{chapter.5}
+\contentsline {section}{\numberline {5.1}Preciz\IeC {\u a}ri asupra con\IeC {{\textcommabelow t}}inutului \IeC {{\textcommabelow s}}i a modului de organizare}{9}{section.5.1}
+\contentsline {subsection}{\numberline {5.1.1}Dimensiune}{9}{subsection.5.1.1}
+\contentsline {section}{\numberline {5.2}Examples: lists, figures, tables, equations}{9}{section.5.2}
+\contentsline {chapter}{\numberline {6}Rezultate teoretice \IeC {{\textcommabelow s}}i experimentale}{13}{chapter.6}
+\contentsline {section}{\numberline {6.1}Teste de func\IeC {{\textcommabelow t}}ionalitate}{13}{section.6.1}
+\contentsline {section}{\numberline {6.2}Teste de performan\IeC {{\textcommabelow t}}\IeC {\u a}}{13}{section.6.2}
+\contentsline {chapter}{\numberline {7}Conluzii}{15}{chapter.7}
+\contentsline {chapter}{Bibliografie}{17}{chapter*.4}
+\contentsline {chapter}{\numberline {A}Diverse anexe}{19}{chapter.1}
+\contentsline {chapter}{\numberline {B}Demonstra\IeC {{\textcommabelow t}}ii matematice detaliate (dac\IeC {\u a} exist\IeC {\u a})}{21}{chapter.2}
+\contentsline {chapter}{\numberline {C}Pseudo-cod sau cod (dac\IeC {\u a} exist\IeC {\u a})}{23}{chapter.3}
+\contentsline {chapter}{\numberline {D}Articole publicate}{25}{chapter.4}
