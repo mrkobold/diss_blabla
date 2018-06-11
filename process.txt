@@ -1,0 +1,19 @@
+1. read some basic shit about SemanticSegmentation
+***************
+https://medium.com/@james_aka_yale/how-to-do-image-segmentation-using-deep-learning-c673cc5862ef
+classification -> localization -> semantic segmentation
+AlexNet, VGG16, GoogLeNet, ResNet
+Semantic Segmentation can be thought of as an encoder network followed by a decoder network. Encoder is a pre-trained classificator network. Decoder: project discriminative features learnt by the encoder onto the pixel space.
+3 main approaches for decoding:
+	1. region base semantic segmentation: R-CNN extracts large quantity of 	object proposals and then computes CNN features for each of them. Then 	classifies.
+	2. fully convolutional network based semantic segmentation (FCN): predictions are in low resolution
+	3. Weakly supervised semantic segmenation: manually labeling is expensive. 
+FCN is most popular.
+***************
+http://blog.qure.ai/notes/semantic-segmentation-deep-learning-review
+Taglal egy csomó jó cikket az újításaikkal együtt +
+semantic segmentation is understanding an image at pixel level -> assign each pixel in the image an object class "dense pixel-wise predictions from our models"
+VOC dataset, MSCOCO dataset
+VOC - Visual Objects Classes
+
+2. decide between project/comparative article approach (sum comparative shit I would be ideal)
