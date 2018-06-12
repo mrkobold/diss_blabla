@@ -6,11 +6,11 @@
 Conform statisticilor Poliției Române \cite{politia_romana}  în anul 2017 în România au fost 8624 de accidente rutiere în care 1951 oameni și-au pierdut viața iar 8172 oameni au fost răniți grav. Iar dacă ne uităm pe statiscticile întregii lumi \cite{WHO}  vedem că cca. 1,3 milioane de oameni mor anual în accidente rutiere.\newline
 Statisticile de accidente ne arată că iar în 94\% dintre toate accidentele are rol și eroarea umană, iar 76\% sunt cauzate numai de eroare umană.
  Fred Wegman și Letty Aarts  în \cite{SWOV} prezintă căîn accidentele rutiere cei mai vulnerabili sunt pietonii (în special copiii) și bicicliștii fiind neprotejați. Locul doi pe lista de top a vulnerabilității o țin conducătorii de motociclete, mopeduri, etc. pentru că ei sunt numai parțial protejati (\ref{fig:lethalities}).\newline
-%table with vulnerabilities in age and transport modes categories
+%image of table with vulnerabilities in age and transport modes categories
 \begin{figure}[h!]
     	\centering
-	\captionsetup{justification=centering,margin=2cm}
-	\includegraphics[width=0.9\textwidth]{figures/lethality_rates.png}
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.8\textwidth]{figures/lethality_rates.png}
 	\caption{Numărul de persoane implicate separate după vârstă și modul de transport pe 100 accidente serioase \cite{SWOV}}
 	\label{fig:lethalities}
 \end{figure}
@@ -24,29 +24,24 @@ Pentru luarea deciziilor sistemul trebuie să obțină informațiile necesare di
 \end{itemize}
 Deși pentru oameni recunoașterea actorilor dintr-o scenă de trafic este o problemă trivială, pentru sistemele informatice este una dificilă, aceștia având nevoie de algoritmi isteți. Condițiile de luminare, vizibilitate precum și trăsăturile obiectelor (rotație, mărime, mișcare, culorile, etc.) sunt factori care îngreunează recunoașterea actorilor dintr-o scenă.
 \section {Tema Lucrării}
-Lucrarea de față se ocupă cu tema recunoașterii actorilor în imaginile captate din scene de trafic urban folosind inteligență artificială. Astfel se află la intersecția a două domenii care au primit foarte multă atenție recent: viziune artificială și inteligență artificială; cu algoritmi de procesare de imagini se vor extrage informații din imagini, iar cu ajutorul unei rețele neuronale se va face detectarea obiectelor în imaginile prelucreate precum și segmentarea semantică a imaginilor.\newline
-De ce rețelele neuronale (convoluționale)? Putem să motivăm această decizie în următorul fel: să propunem că sarcina noastră este de a face un program care poate să recuoască un simplu cub, fără textură pe o imagine. Chiar și acest obiect simplu introduce mii de probleme: obiectul se poate roti, diferite condiții de luminare pot să încurce programul nostru. Și ce se întâmplă dacă cubul poate să aibă orice textură? Durere de cap! Am avea nevoie de pre-procesări ca să putem să tragem concluzii uniforme.\newline
-Puterea rețelelor neuronale se află în faptul ca nu este nevoie de nicio trăsătură care diferențiază o categorie de obiecte de o altă categorie. Dacă rețeaua neuronală are un set de antrenare destul de mare, poate să tragă concluzii el însuși și să facă generalizări.
-
-În viitorul apropiat o să avem nevoie de segmentare, pt că calculatoarele tre folosite, etc
-Segmentarea imaginilor o chestie foarte bună: înțelegere, context, descompunere
-
-In viata noastra de zi cu zi apar camere=> ar fi util sa intelegem ceea ce captureaza cu calculatoare
-
-viziune artificiala + inteligenta artificiala
-Ce se scrie aici:
+Tema lucrării de față este recunoașterea actorilor în imaginile captate din scene de trafic urban folosind inteligență artificială. Astfel se află la intersecția a două domenii care au primit foarte multă atenție recent: viziune artificială și inteligență artificială; cu algoritmi de procesare de imagini se vor extrage informații din imagini, iar cu ajutorul unei rețele neuronale se va face detectarea obiectelor în imaginile prelucrate precum și segmentarea semantică a imaginilor.\newline
+De ce rețelele neuronale (convoluționale)? Putem să motivăm această decizie cu un mic exemplu luată din cadrul recunoașterii obiectelor dintr-o imagine: să propunem că sarcina noastră este de a face un program care poate recuoască cub simplu, fără nicio textură pe o imagine. Chiar și acest obiect simplu introduce mii de probleme dacă folosim metode tradiționale: obiectul se poate roti, diferite condiții de luminare pot să încurce programul nostru. Și ce se întâmplă dacă vrem să recunoaștem un cub care poate să aibă și textură? Durere de cap! Am avea nevoie de o cantitate imensă de pre-procesări ca să putem să tragem concluzii uniforme.\newline
+Aici intră în "imagine" puterea rețelelor neuronale. Acestea nu au nevoie de nicio trăsătură care diferențiază o categorie de obiecte de o altă categorie. Dacă rețeaua neuronală are un set de antrenare variat și destul de mare, el poate să tragă concluzii și să facă generalizări despre obiecte acestea fiind imune la zgomote; funcționând ca cortexul vizual al animalelor, o rețea neuronală antrenată este greu de înșelat.\newline
+Domeniul exact al temei este clasificarea imaginilor, detecția obiectelor și segmentarea semantică a imaginilor folosing rețele neuronale convoluționale (CNN).
+%image presenting image classification, detection and segmentation
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.9\textwidth]{figures/class_detect_segment.jpeg}
+	\caption{Clasificare de imagine, localizare, detecție de obiecte, segmentare semantică \cite{class_detect_segment}}
+	\label{fig:class_detect_semgent}
+\end{figure}
+Dacă ne uităm pe figura \ref{fig:class_detect_semgent} putem să înțelegem ce înseamnă aceste concepte:
 \begin{itemize}
-    \item Contextul
-    \item Conturarea/Descrierea domeniului exact al temei
-    \item Se răspunde la întrebările: \textbf{ce} (s-a făcut)?, \textbf{de ce} (s-a făcut, adică motivația; ce se rezolvă, la ce este util, etc.)?, \textbf{cum} (s-a făcut, adică particularitățile abordării, prezentate sumar).
-    \item Introducerea se termină cu o descriere a conținutului lucrării, de genul: Cap X descrie ..., Cap Y prezintă ...
-    \item Introducerea reprezintă o sinteză a lucrării, din care cititorul trebuie să-și poată da bine seama dacă lucrarea prezintă sau nu interes pentru el. 
-    \item Se poate organiza pe subsecțiuni, dacă se dorește, după exemplul de mai jos, dar nu e obligatoriu asta, având în vedere dimensiunea mică
-    \item reprezintă cca 5\% din lucrare (nu mai mult de 2-4 pagini)
+	\item \textbf{Clasificarea} unei imagini constă în atribuirea unei etichete (label), specificarea categoriei de obiecte în care se încadrează obiectul reprezentat în imaginea respectivă,
+	\item Când găsim dreptunghiul înăuntrul căreia se afla obiectul respectiv, vorbim despre \textbf{detecție de obiect},
+	\item \textbf{Segmentarea semantică} este procesul prin care pentru fiecare pixel îi atribuim un obiect.
 \end{itemize}
-
-Despre contextul în care este abordată și se aplică tema lucrării.
-
-% \section{Report's Structure}
-\section{Structura lucrării}
+\section {Structura Lucrării}
+sum fuk here to fill 3 pages and 2 rows in total
 Capitolul~\ref{cap:obiective-specificatii} prezintă obiectivele \dots. Capitolul~\ref{cap:studiu-bibliografic} descrie \dots. În capitolul~\ref{cap:fund-teoretice} sunt prezentate \dots.
