@@ -1,6 +1,19 @@
 % \chapter{Bibliographic Survey}
 \chapter{Studiu bibliografic}
 \label{cap:studiu-bibliografic}
+În acest capitol se face o prezentare a stagiului în care este domeniul; se detaliază cele mai bune sisteme de detecția obiectelor și segmentarea imaginilor de ultima oră prin informații căpătate din articole și cărți.\newline
+Va fi vorbă despre viziunea artificială, rețelele neurale (mai ales architecturile folosite în procesarea imaginilor). Temele detecției obiectelor și segmentării semantice a imaginilor vor fi detaliate, prezentând caracteristicile specifice sistemelor inteligente capabile de a executa aceste sarcini.Dar mai întâi o imagine de ansamblu...\newline
+\section{Imaginea de ansamblu}
+De multe ori este o confuzie când vorbim despre conceptele de clasificarea imaginilor, detecția obiectelor și segmentarea semantică a imaginilor. Toți trei fac parte din tematica înțelegerii unei imagini existând suprapuneri între aceștia, dar bineînțeles vorbim despre trei procese care diferă atât prin rezultatele executării cât și prin complexitatea algoritmilor care pot să le realizeze.\newline
+Clasificarea imaginilor este procesul prin care după cum zice și numele, este procesul prin care obiectul fotografiat este înscrisă într-o categorie de obiecte (primind o imagine, sistemul trebuie să decidă clasa căreia aparține obiectul e.g. un câine sau o pisică).\newline
+Detecția obiectelor pe de altă parte este procesul prin care identificăm locația a mai multor obiecte într-o imagine (sau numărarea instanțelor de un anumit tip de obiect într-o imagine). Majoritatea algoritmilor de detecția obiectelor (precum și algoritmul folosit în această lucrare) funcționează în următorul fel:
+\begin{enumerate}
+	\item un model sau un algoritm este folosit pentru generarea unei multitudini de regiuni de interest. Regiunile acoperă toată imaginea iar caracteristica lor comună este șansa ridicata de a fi bounding box pentru un obiect
+	\item în pasul doi se extrag trăsături specifice din regiunile generate la pasul anterior. Se face o evaluare a trăsăturilor extrase și sistemul determină dacă regiunea respectivă conține un obiect, și dacă da, atunci ce fel de obiect (ce categorie). Acest pas este o componentă de clasificare a imaginilor
+	\item ultimul pas este o post procesare, regiunile cu suprapuneri fiind combinate pentru alcătuirea unui bounding box
+\end{enumerate}
+Segmentarea semantică a unei imagini este procesul prin care imaginea digitală se partiționează în mai multi segmenți (seturi de pixeli cunoscute ca superpixeli). Scopul segmentării semantice este aceea de a simplifica și/sau de a schimba reprezentarea unei imagini pentru o înțelegere și analizare mai simplă. Segmentarea semantică este adesea folosită pentru localizarea obiectelor și a conturilor în imagini. Mai precis, segmentarea semantică a unei imagini este procesul prin care pentru fiecare pixel în asignăm o etichetă, astfel încât pixelii care împărtășesc aceeași etichetă, împărtășesc caracteristici definite (e.g. aparțin aceluiași obiect).
+
 
 Documentarea bibliografică are ca obiectiv fixarea referențialului în care se situează tema, prezentarea susrselor bibliografice utilizate și a cercetărilor similare și raportarea abordării din lucrare la acestea.
 
