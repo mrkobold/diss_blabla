@@ -1,4 +1,4 @@
-% \chapter{Bibliographic Survey}
+f% \chapter{Bibliographic Survey}
 \chapter{Studiu bibliografic}
 \label{cap:studiu-bibliografic}
 În acest capitol se face o prezentare a stagiului în care este domeniul; se detaliază cele mai bune sisteme de detecția obiectelor și segmentarea imaginilor de ultima oră prin informații căpătate din articole și cărți.\newline
@@ -59,7 +59,7 @@ Pal, Nikhil R and Pal și Sankar K în \cite{pal1993review} prezintă că dintre
 Rețelele neuronale convoluționale sunt foarte similare cu rețelele neuronale profunde clasice: sunt alcătuite din neuroni care au ponderi pe care pot să le învețe. Fiecare neuron are intrări, aplică funcția de activare și propagă mai departe activarea produsă.\newline
 Deci ce se schimbă? Architecturile convoluționale se bazează pe asumpția explicită, că intrările sunt \textbf{imagini}. Această asumpție ne împuternicesc să facem o architectură mai avantajoasă. Astfel pasul de propagare înainte devine mai eficientă iar costurile de antrenare se micșorează dat fiind faptul că numărul parametrilor se micșorează grozav.
 În \cite{csfromuniversity} se prezintă de ce avem nevoie de îmbunătățirea oferită de rețelele convoluționale: rețelele neuronale regulare nu se scalează bine pentru imagini mari. În datase-ul CIFAR-10 imaginile au numai mărimea de 32x32x3 (32 lățime, 32 înălțime, 3 canale de culori), deci un strat complet conectat ar conține 32*32*3 = 3072 ponderi. Chiar dacă acest număr pare maniabil, se vede clar că structura fully-connected nu se scalează pentru imagini mari. De exemplu o poză color, cu o rezoluție de 200x200 pixeli ar avea nevoie de 200*200*3 = 120,000 ponderi.\newline
-Rețelele convoluționale elimină problema numerelor mari prin punerea în practică a două idei: folosirea straturilor convoluționale și a straturilor de pooling. Dintre astea două straturile convoluționale fac marea parte a computărilor. Un strat convoluțional este alcătuit de fapt de în set de filtre; fiecare extrage trăsăturile corespunzătoare lui, și construieste o mapă de activări.\newline
+Rețelele convoluționale elimină problema numerelor mari prin punerea în practică a două idei: folosirea straturilor convoluționale și a straturilor de pooling. Dintre astea două straturile convoluționale fac marea parte a computărilor. Un strat convoluțional este alcătuit de fapt de în set de filtre; fiecare extrage trăsăturile corespunzătoare lui, și construieste o hartă de activări.\newline
 Acum să vorbim despre detecția de obiecte și segmentarea semantică a unei imagini folosind rețele neuronale convoluționale...
 \subsection{Detecția Obiectelor și Segmentarea Imaginilor Folosind Rețele Neuronale}
 În \cite{historyCNN} Dhruv Parthasarathy prezintă că pentru detecția obiectelor și segmentarea semantică, cele mai bune rezultate sunt produse de rețele neuronale tip R-CNN (Regional Convolutional Neural Network). R-CNN are ca scop găsirea obiectelor principale în imagine (prin identificarea unui bounding box pentru fiecare) precum și clasificarea acestora într-o categorie. Intrarea în R-CNN este o imagine, iar ieșirea este un set de bounding boxes plus lista etichetelor obiectelor din imaginea de la intrare. Dar cum poate să specifice bounding box pentru obiecte? Ideea de bază a R-CNN este foarte intuitivă - se generează o miltitudine de regiuni în imagine și pentru fiecare se verifică cu ce probabilitate se poate clasifica obiectul din interior.\newline
@@ -76,10 +76,6 @@ Regiunile astea nu se generează la întâmplare, ci cu ajutorul unui algoritm: 
 Odată ce regiunile (cu potențial mare de a conține un obiect) sunt generate de către selective search, R-CNN le clasifică cu o versiune modificată a rețelei AlexNet. Pe ultimul strat din rețeaua neuronală, se decide dacă regiunea încercată este într-adevăr un obiect, și dacă răspunsul este da, atunci ce fel de obiect?\newline
 Cu toate că R-CNN funcționează coret, are un singur dezavantaj destul de serios, și anume: este foarte lent atât la folosirea propriu zisă cât și la faza de antrenare. Pentru toate ~2000 de regiuni generate cu selective search, se face o propagare înainte prin rețeaua neuronală (AlexNet), ceea ce înseamnă 2000 clasificări per imagine. Acest lucru nu se scalează bine și nu are șansa de a funcționa în timp real pentru captări video.\newline
 În anul 2015, Ross Girshick (creatorul R-CNN) a rezolvat ambele probleme prin crearea unui nou algoritm numit Fast R-CNN. Să vedem care sunt ămbunătățirile aduse de acest sistem?
-\begin{itemize}
-	\item RoI Pooling (Region of Interest Pooling): s-a recunoscut faptul că când se efectuează pasul de propagare înainte pentru cele ~2000 regiuni propuse, sunt foarte multe suprapuneri. Îmbunătățirea constă în realizarea faptei, că în loc de a rula pe toate regiunile o clasificare, am putea să rulăm rețeaua neuronală o dată pe toată imaginea dacă găsim o metodă pentru împărtășirea acestei computatații pentru toate regiunile propuse (\ref{fig:roi_pooling}).
-	\item Combinarea tuturor modelelor într-o rețea: în Fast R-CNN rețeaua neuronală convoluțională, clasificatorul și generatorul de regiuni sunt antrenate împreună. Unde în R-CNN am avut modele separate pentru extragerea trăsăturilor cu CNN, pentru clasificare (Support Vector Machine) și pentru generarea regiunilor de interest (Selective Search), acolo în Fast R-CNN se folosește o singură rețea pentru calcularea tuturor.
-\end{itemize}
 %image how RoI pooling works
 \begin{figure}[h!]
     	\centering
@@ -88,46 +84,29 @@ Cu toate că R-CNN funcționează coret, are un singur dezavantaj destul de seri
 	\caption{RoI Pooling \cite{historyCNN}}
 	\label{fig:roi_pooling}
 \end{figure}
+\begin{enumerate}
+	\item RoI Pooling (Region of Interest Pooling): s-a recunoscut faptul că când se efectuează pasul de propagare înainte pentru cele ~2000 regiuni propuse, sunt foarte multe suprapuneri. Îmbunătățirea constă în realizarea faptei, că în loc de a rula pe toate regiunile o clasificare, am putea să rulăm rețeaua neuronală o dată pe toată imaginea dacă găsim o metodă pentru împărtășirea acestei computatații pentru toate regiunile propuse (\ref{fig:roi_pooling}).
+	\item Combinarea tuturor modelelor într-o rețea: în Fast R-CNN rețeaua neuronală convoluțională, clasificatorul și generatorul de regiuni sunt antrenate împreună. Unde în R-CNN am avut modele separate pentru extragerea trăsăturilor cu CNN, pentru clasificare (Support Vector Machine) și pentru generarea regiunilor de interest (Selective Search), acolo în Fast R-CNN se folosește o singură rețea pentru calcularea tuturor. Fast R-CNN a înlocuit clasificatorul SVM cu un strat softmax. În plus a mai adăugat un strat de regresie lineară în paralele cu stratul softmax introdus pentru a crea coordonatele care limitează regiunile.\newline
+Chiar și cu toate avansările acestea mai era un bottleneck în procesul Fast R-CNN, și anume generatorul de regiuni. Cum am văzut, primul pas spre detecția locației obiectelor era generarea unei multitudini de locații potențiale (regiunile de interest). În Fast R-CNN acestea sunt generate cu folosirea Selective Search, un proces destul de lent. În anul 2015 o echipă de la Microsoft a găsit o metodă pentru a accelera pocesul de generare a regiunilor. Această metodă (Faster R-CNN) vine aproape fără costuri. Ideea principală a Faster R-CNNului era că propunerile de regiuni de fapt depind de trăsăturile din imagine. Și dacă asta este cazul, de ce să nu refolosim rezultatele CNN-ului și pentru generarea regiunilor?
+\end{enumerate}
 
-
-
-
-%image showing that neural networks outperform humans on the ILSVRC
+\subsubsection{Segmentare semantică - Mask R-CNN: Faster R-CNN la nivel de pixel}
+În 2017 Kaiming He și o echipă de cercetători de la Facebook au găsit o metodă pentru a extinde Faster R-CNN să fie capabil de segmentare semantică la nivel de pixel. Acest lucru este făcut prin adăugarea unei ramuri capabile de a decide dacă un pixel aparține unui obiect sau nu (aceasta fiind o rețea neuronală complet convoluțională).
+%image meaning of semantic segmentation
 \begin{figure}[h!]
     	\centering
 	\captionsetup{justification=centering, margin=2cm}
-	\includegraphics[width=0.9\textwidth]{figures/top_five_errors_ILSVRC.png}
-	\caption{Rețelele neuronale convoluționale obțin punctaj mai mare decât oamenii în clasificarea obiectelor \cite{historyCNN}}
-	\label{fig:historyCNN}
+	\includegraphics[width=0.5\textwidth]{figures/semantic_segmentation.png}
+	\caption{Segmentare semantică \cite{DBLP:journals/corr/HeGDG17}}
+	\label{fig:segmentare_semantica}
 \end{figure}
-
-
-Documentarea bibliografică are ca obiectiv fixarea referențialului în care se situează tema, prezentarea susrselor bibliografice utilizate și a cercetărilor similare și raportarea abordării din lucrare la acestea.
-
-Referințele bibliografice se vor face pentru fiecare carte, articol sau material folosit pentru elaborarea lucrării de licență. 
-
-Reprezintă cca. 10--15\% din lucrare.
-
-
-% \section{Related Work}
-\section{Abordări similare}
-
-Comparați abordarea voastră cu cele ale altor soluții: ce e asemănător, ce e diferit (și, de preferat, mai bun). 
-
-Citarea referințelor se face ca în exemplele \ref{subsec:s10} din Bibliografie. 
-Vezi citările următoare.
-
-În articolul \cite{Antoniou04} autorul descrie configurația tehnică a unei "honeynet" și prezintă câteva atacuri de actualitate asupra honeynet, precum și o serie de recomandări pentru securizarea sistemelor conectate la rețele de calculatoare.
-
-% În capitolul 4 al [], referitor la valoare honeypots, Spitzner prezintă avantajele și dezavantajele acestora.
-
-În articolul on-line \cite{electronic-citation} găsim detalii interesante despre \dots.
-
-
-% \section{Technologies and Methods}
-\section{Tehnici/Tehnologii/Surse folosite}
-
-Sursele de documentare referitoare la metodele, tehnologiile, ideile folosite. 
-
-
-
+Intrarea ramurei de segmentare este o hartă de trăsături, iar ieșirea este o matrice cu 1 în toate pozițiile în care se află pixeli care aparțin obiectului și 0 în rest (o mască binară). Pentru o segmentare cu precizie înaltă, s-a mai făcut o modificare pe Mask R-CNN. Pentru a atinge acest scop, autorii au ajustat RoIPool astfel încât să genereze regiuni mai precise. Algoritmul lor se numește RoIAlign.\newline
+Rădăcina problemei era faptul că când se face extragere de trăsături, inevitabil pierdem informație spațială. Să ne imaginăm că avem o imagine de 128x128 pixeli, iar harta de trăsături construită de CNN a acestei imagini este de 25x25 pixeli. Să ne imaginăm, ca vrem trăsăturile din regiunea colțului din stânga sus, cu o dimensiune de 15x15 pe imaginea originală. Cum putem să selectăm pixelii corespunzători din harta de trăsăuri? Știm că fiecare pixel din imaginea originală corespune a ~25/128 pixeli din imaginea construită. Pentru a selecta 15 pixeli din imaginea originală, selectăm 15x25/128~2.93 pixeli.\newline
+În RoIPool am rotunji jos acest număr și am alege 2 pixeli, cauzând o nealiniere mică. În schimb în RoIAlign se folosește interpolare biliniară penru a găsi răspunsul la întrebarea: \textit{ce se află la pixelul 2.93?}
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.9\textwidth]{figures/image_segmentation_results_mrcnn.png}
+	\caption{Segmentare semantică cu Mask R-CNN \cite{DBLP:journals/corr/HeGDG17}}
+	\label{fig:segmentare_semantica cu Mask R-CNN}
+\end{figure}
