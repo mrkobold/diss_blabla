@@ -21,7 +21,7 @@ Segmentarea semantică a unei imagini este procesul prin care imaginea digitală
 	\caption{Clasificare de imagine, localizare, detecție de obiecte, segmentare semantică \cite{class_detect_segment}}
 	\label{fig:class_detect_semgent}
 \end{figure}
-\section{Domeniile din care face parte această lucarare}
+\section{Domeniile din care face parte această lucare}
 \subsection{Viziunea Artificială}
 Viziunea artificială este un domeniu interdisciplinar care se ocupă cu metode cu ajutorul cărora calculatoarele pot să câstige o întelegere la un nivel ridicat și abstract ale imaginilor digitale. Scopul este automatizarea proceselor de care sistemul vizual human este capabil.\newline
 Problemele în acest domeniu se pot încadra în mai multe categorii cum ar fi obținerea, procesarea, analiza și întelegerea imaginilor digitale. \textit{Înțelegerea} în acest context înseamnă transformarea imaginilor vizuale în descrieri, care la rândul lor pot fi folosite în alte procese (e.g. luarea deciziilor). După \cite{Szeliski10computervision} viziunea artificială este folosită în următoarele domenii:
@@ -57,7 +57,49 @@ Algoritmul (în cea mai simplă formă a ei) are două stagii:
 \subsection{Rețele neuronale convoluționale}
 Pal, Nikhil R and Pal și Sankar K în \cite{pal1993review} prezintă că dintre technicile de segmentarea imaginilor, rețelele neuronale convoluționale întrec celelalte abordări cu o margine semnificativă.\newline
 Rețelele neuronale convoluționale sunt foarte similare cu rețelele neuronale profunde clasice: sunt alcătuite din neuroni care au ponderi pe care pot să le învețe. Fiecare neuron are intrări, aplică funcția de activare și propagă mai departe activarea produsă.\newline
-Deci ce se schimbă? Architecturile convoluționale se bazează pe asumpția explicită, că intrările sunt \textbf{imagini}. Această asumpție ne împuternicesc să facem o architectură mai avantajoasă. Astfel propagarea înainte devine mai eficientă iar costurile de antrenare se micșorează grozav.
+Deci ce se schimbă? Architecturile convoluționale se bazează pe asumpția explicită, că intrările sunt \textbf{imagini}. Această asumpție ne împuternicesc să facem o architectură mai avantajoasă. Astfel pasul de propagare înainte devine mai eficientă iar costurile de antrenare se micșorează dat fiind faptul că numărul parametrilor se micșorează grozav.
+În \cite{csfromuniversity} se prezintă de ce avem nevoie de îmbunătățirea oferită de rețelele convoluționale: rețelele neuronale regulare nu se scalează bine pentru imagini mari. În datase-ul CIFAR-10 imaginile au numai mărimea de 32x32x3 (32 lățime, 32 înălțime, 3 canale de culori), deci un strat complet conectat ar conține 32*32*3 = 3072 ponderi. Chiar dacă acest număr pare maniabil, se vede clar că structura fully-connected nu se scalează pentru imagini mari. De exemplu o poză color, cu o rezoluție de 200x200 pixeli ar avea nevoie de 200*200*3 = 120,000 ponderi.\newline
+Rețelele convoluționale elimină problema numerelor mari prin punerea în practică a două idei: folosirea straturilor convoluționale și a straturilor de pooling. Dintre astea două straturile convoluționale fac marea parte a computărilor. Un strat convoluțional este alcătuit de fapt de în set de filtre; fiecare extrage trăsăturile corespunzătoare lui, și construieste o mapă de activări.\newline
+Acum să vorbim despre detecția de obiecte și segmentarea semantică a unei imagini folosind rețele neuronale convoluționale...
+\subsection{Detecția Obiectelor și Segmentarea Imaginilor Folosind Rețele Neuronale}
+În \cite{historyCNN} Dhruv Parthasarathy prezintă că pentru detecția obiectelor și segmentarea semantică, cele mai bune rezultate sunt produse de rețele neuronale tip R-CNN (Regional Convolutional Neural Network). R-CNN are ca scop găsirea obiectelor principale în imagine (prin identificarea unui bounding box pentru fiecare) precum și clasificarea acestora într-o categorie. Intrarea în R-CNN este o imagine, iar ieșirea este un set de bounding boxes plus lista etichetelor obiectelor din imaginea de la intrare. Dar cum poate să specifice bounding box pentru obiecte? Ideea de bază a R-CNN este foarte intuitivă - se generează o miltitudine de regiuni în imagine și pentru fiecare se verifică cu ce probabilitate se poate clasifica obiectul din interior.\newline
+%image showing how selective search proposes regions
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.9\textwidth]{figures/selective_search.png}
+	\caption{Selective Search \cite{selective_search}}
+	\label{fig:selective_search}
+\end{figure}
+Regiunile astea nu se generează la întâmplare, ci cu ajutorul unui algoritm: Selective Search. Selective search se uită pe imaginea completă, și generează regiunile astfel încât astea să conțină pixelii adiacenți care pot fi grupați împreună, cum ar fi: pixeli cu culoare asemănătoare, texturi asemănătoare, intensitate asemănătoare, etc.\newline
+
+Odată ce regiunile (cu potențial mare de a conține un obiect) sunt generate de către selective search, R-CNN le clasifică cu o versiune modificată a rețelei AlexNet. Pe ultimul strat din rețeaua neuronală, se decide dacă regiunea încercată este într-adevăr un obiect, și dacă răspunsul este da, atunci ce fel de obiect?\newline
+Cu toate că R-CNN funcționează coret, are un singur dezavantaj destul de serios, și anume: este foarte lent atât la folosirea propriu zisă cât și la faza de antrenare. Pentru toate ~2000 de regiuni generate cu selective search, se face o propagare înainte prin rețeaua neuronală (AlexNet), ceea ce înseamnă 2000 clasificări per imagine. Acest lucru nu se scalează bine și nu are șansa de a funcționa în timp real pentru captări video.\newline
+În anul 2015, Ross Girshick (creatorul R-CNN) a rezolvat ambele probleme prin crearea unui nou algoritm numit Fast R-CNN. Să vedem care sunt ămbunătățirile aduse de acest sistem?
+\begin{itemize}
+	\item RoI Pooling (Region of Interest Pooling): s-a recunoscut faptul că când se efectuează pasul de propagare înainte pentru cele ~2000 regiuni propuse, sunt foarte multe suprapuneri. Îmbunătățirea constă în realizarea faptei, că în loc de a rula pe toate regiunile o clasificare, am putea să rulăm rețeaua neuronală o dată pe toată imaginea dacă găsim o metodă pentru împărtășirea acestei computatații pentru toate regiunile propuse (\ref{fig:roi_pooling}).
+	\item Combinarea tuturor modelelor într-o rețea: în Fast R-CNN rețeaua neuronală convoluțională, clasificatorul și generatorul de regiuni sunt antrenate împreună. Unde în R-CNN am avut modele separate pentru extragerea trăsăturilor cu CNN, pentru clasificare (Support Vector Machine) și pentru generarea regiunilor de interest (Selective Search), acolo în Fast R-CNN se folosește o singură rețea pentru calcularea tuturor.
+\end{itemize}
+%image how RoI pooling works
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.7\textwidth]{figures/fast_rcnn.png}
+	\caption{RoI Pooling \cite{historyCNN}}
+	\label{fig:roi_pooling}
+\end{figure}
+
+
+
+
+%image showing that neural networks outperform humans on the ILSVRC
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.9\textwidth]{figures/top_five_errors_ILSVRC.png}
+	\caption{Rețelele neuronale convoluționale obțin punctaj mai mare decât oamenii în clasificarea obiectelor \cite{historyCNN}}
+	\label{fig:historyCNN}
+\end{figure}
 
 
 Documentarea bibliografică are ca obiectiv fixarea referențialului în care se situează tema, prezentarea susrselor bibliografice utilizate și a cercetărilor similare și raportarea abordării din lucrare la acestea.
