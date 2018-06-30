@@ -62,12 +62,14 @@ Deci ce se schimbă? Architecturile convoluționale se bazează pe asumpția exp
 Rețelele convoluționale elimină problema numerelor mari prin punerea în practică a două idei: folosirea straturilor convoluționale și a straturilor de pooling. Dintre astea două straturile convoluționale fac marea parte a computărilor. Un strat convoluțional este alcătuit de fapt de în set de filtre; fiecare extrage trăsăturile corespunzătoare lui, și construieste o hartă de activări.\newline
 Acum să vorbim despre detecția de obiecte și segmentarea semantică a unei imagini folosind rețele neuronale convoluționale...
 \subsection{Detecția Obiectelor și Segmentarea Imaginilor Folosind Rețele Neuronale}
-În \cite{historyCNN} Dhruv Parthasarathy prezintă că pentru detecția obiectelor și segmentarea semantică, cele mai bune rezultate sunt produse de rețele neuronale tip R-CNN (Regional Convolutional Neural Network). R-CNN are ca scop găsirea obiectelor principale în imagine (prin identificarea unui bounding box pentru fiecare) precum și clasificarea acestora într-o categorie. Intrarea în R-CNN este o imagine, iar ieșirea este un set de bounding boxes plus lista etichetelor obiectelor din imaginea de la intrare. Dar cum poate să specifice bounding box pentru obiecte? Ideea de bază a R-CNN este foarte intuitivă - se generează o miltitudine de regiuni în imagine și pentru fiecare se verifică cu ce probabilitate se poate clasifica obiectul din interior.\newline
+În \cite{historyCNN} Dhruv Parthasarathy prezintă că pentru detecția obiectelor și segmentarea semantică, cele mai bune rezultate sunt produse de rețele neuronale tip R-CNN (Regional Convolutional Neural Network).R-CNN poate fi gândită ca o rețea encoder urmată de o altă rețea: o rețea decoder. Prima de obicei este o rețea pre-antrenată de clasificare, cum ar fi CGG/ResNet. A doua parte, decoficatorul are ca sarcină proiectarea semantică a trăsăturilor discriminative (de rezoluție mai mică) care sunt învățate de encoder la spațiul pixel (rezoluția originală a imaginii) pentru a ajunge la o clasificare densă, pe nivel de pixel în imaginea originală.\newline
+Diferența față de clasificare, unde reultatul final este clasificarea singurului obiect important din imagine, detecția și segmentarea nu are nevoie numai de discriminare la nivel de pixel, ci și de un mecanism pentru a proiecta trăsăturile învățate în faze diferite din encoder la spațiul pixel a imaginii originale.\newline
+ R-CNN are ca scop găsirea obiectelor principale în imagine (prin identificarea unui bounding box pentru fiecare) precum și clasificarea acestora într-o categorie. Intrarea în R-CNN este o imagine, iar ieșirea este un set de bounding boxes plus lista etichetelor obiectelor din imaginea de la intrare. Dar cum poate să specifice bounding box pentru obiecte? Ideea de bază a R-CNN este foarte intuitivă - se generează o miltitudine de regiuni în imagine și pentru fiecare se verifică cu ce probabilitate se poate clasifica obiectul din interior.\newline
 %image showing how selective search proposes regions
 \begin{figure}[h!]
     	\centering
 	\captionsetup{justification=centering, margin=2cm}
-	\includegraphics[width=0.9\textwidth]{figures/selective_search.png}
+	\includegraphics[width=1.0\textwidth]{figures/selective_search.png}
 	\caption{Selective Search \cite{selective_search}}
 	\label{fig:selective_search}
 \end{figure}
@@ -80,7 +82,7 @@ Cu toate că R-CNN funcționează coret, are un singur dezavantaj destul de seri
 \begin{figure}[h!]
     	\centering
 	\captionsetup{justification=centering, margin=2cm}
-	\includegraphics[width=0.7\textwidth]{figures/fast_rcnn.png}
+	\includegraphics[width=0.8\textwidth]{figures/fast_rcnn.png}
 	\caption{RoI Pooling \cite{historyCNN}}
 	\label{fig:roi_pooling}
 \end{figure}
@@ -106,7 +108,22 @@ Rădăcina problemei era faptul că când se face extragere de trăsături, inev
 \begin{figure}[h!]
     	\centering
 	\captionsetup{justification=centering, margin=2cm}
-	\includegraphics[width=0.9\textwidth]{figures/image_segmentation_results_mrcnn.png}
+	\includegraphics[width=1.0\textwidth]{figures/image_segmentation_results_mrcnn.png}
 	\caption{Segmentare semantică cu Mask R-CNN \cite{DBLP:journals/corr/HeGDG17}}
 	\label{fig:segmentare_semantica cu Mask R-CNN}
 \end{figure}
+
+1 \newline
+2 \newline
+3 \newline
+4 \newline
+5 \newline
+6 \newline
+7 \newline
+8 \newline
+9 \newline
+10 \newline
+11\newline
+12 \newline
+13 \newline
+14 \newline
