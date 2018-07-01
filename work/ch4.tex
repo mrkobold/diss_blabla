@@ -4,9 +4,15 @@
 Scopul proiectului a fost proiectarea și implementarea unui program/sistem care este capabil să clasifice obiecte din imagini, să poată face detecția obictelor (adică să specifice unde se află acestea în imagine) și să facă segmentarea semantică a imaginii. Am ajuns la decizia că pentru aceste probleme o să folosesc o rețea neuronală convoluțională deoarece rețelele neuronale depășesc orice altă abordare capabilă să efectueze aceste sarcini.\newline
 În primul rând o să se facă prezentarea rețelelor neuronale (convoluționale) și straturile specifice acestora. După aceasta vom afla cum se întâmplă antrenarea rețelei.
 
+
+
+
 \section{Rețele Neuronale Convoluționale}
 O rețea neuronală convoluțională - ca orice rețea neuronală - are la bază conceptul de \textit{neuron}, acesta fiind elementul din care se construiește. Aceștia sunt organizați în \textit{straturi de neuroni} (layer), straturile fiind interconectate formând o \textit{ierarhie de straturi}.\newline
 Informația de intrare este alimentată \textit{stratului de intrare} (input layer). După aceasta semnaul se propagă printr-o serie de \textit{straturi ascunse}; în fiecare strat neuronii își calculează activarea prin folosirea \textit{funcției de activare}, iar activările se propagă în direcția \textit{stratului de ieșire} (output layer). Stratul de ieșire la rândul lui va furniza informația necesară (e.g. clasificarea obiectului din imagine, detecția obiectelor, segmentarea semantică, etc.).
+
+
+
 
 \subsection{Neuronul Artificial}
 În contextul științei biologiei neuronul este o celulă, un bloc de construcție, a cărui rol este colectarea semnalelor de la neuronii vecini prin dentriți, procesarea acestor informații, și pe baza informațiilor obținute și a structurii interne emite un semnal al lui prin axonul lui.\newline
@@ -33,18 +39,40 @@ Ideea neuronului artificial este bazată pe aceeași idee, părțile din care se
 	\label{fig:neuronul_artificial}
 \end{figure}
 
-Dacă ne uităm la funcțiile de transfer a neuronilor artificiali des folosite, vedem că există mai multe tipuri sau categorii de neuroni acestea fiind:
+Neuronul biologic se activează (dă un semnal de ieșire) numai dacă semnalul de intrare depășește un anumit prag. În rețelele neuronale artificiale acest efect este simulat aplicând \textit{sumei ponderate} a intrărilor o fincție de transfer (activare) pentru a obține semnalul de ieșire.
 
+
+
+\subsubsection{Descrierea matematică a funcționării unui neuron}
+Întrările unui neuron se pot percepe ca o matrice de numere (fiecare fiind activarea unui neuron de pe stratul anterior) având $R$ elemente. Intrările individuale $p_1, p_2, \dots, p_R$ sunt înmulțite cu ponderile $w_{1,1}, w_{1,2}, \dots, w_{1,R},$ și valorile ponderate se însumează. Suma se poate nota cu \textbf{Wp}, adică produsul scalar al matricei \textbf{W} și vectorul \textbf{p}.\newline
+Neuronul are \textit{deplasarea b (bias)}, care se adună cu intrările ponderate, rezultând arguentul $n$ al funcției de transfer
+\begin{equation}
+f: w_{1,1}p_1 + w_{1,2}p_2 + \dots + w_{1,R}p_R + b = n
+\end{equation}
+Această poate fi scrisă cu notația abreviată:
+\begin{equation}
+n = W*p + b; a = f(n)
+\end{equation}
+
+
+% enumerate the usual activation functions of neurons
+Dacă ne uităm la funcțiile de transfer a neuronilor artificiali des folosite, vedem că există mai multe tipuri sau categorii de neuroni acestea fiind:
 \begin{itemize}
-	\item \textit{Threshlod neurons} (neuronii cu funcția treaptă): acest tip de neuron are cea mai simplă funcție de activare; ia intrările de la neuronii din stratul anterior, multiplică activările acestora cu ponderea respectivă pentru fiecare și calculează suma numerelor obținute după înmulțire. Înainte de a da ai departe rezultatul, se mai scade un număr special, numit \textit{bias}. Dacă rezultatul scăderii este mai mare decât zero, atunci ieșirea neuronului este unu, altfel 0.
+	\item \textit{Threshlod neurons} (neuronii cu funcția treaptă): acest tip de neuron are cea mai simplă funcție de activare; ia intrările de la neuronii din stratul anterior, multiplică activările acestora cu ponderea respectivă pentru fiecare și calculează suma numerelor obținute după înmulțire. Înainte de a da ai departe rezultatul, se mai scade un număr special, numit \textit{bias}. Dacă rezultatul scăderii este mai mare decât zero, atunci ieșirea neuronului este unu, altfel zero.
+\begin{equation}
+	activation =
+		\begin{cases}
+			1, \text{if } n > 0 \\
+			0, \text{otherwise}
+		\end{cases}
+\end{equation}
 	\item \textit{Linear combination neuron} (neuronii cu funcția de transfer liniară - purelin): acest tip de neuron se comportă asemănător cu neuronii de prag. Ia intrările, calculează suma intrărilor ponderate și din această sumă scade bias-ul. Dacă rezultatul este mai mic decât zero, atunci activarea acestui neuron va fi zero. Între zero și unu, se propagă mai departe valoarea calculată. Peste unu, valoarea trimisă mai departe va fi și ea unu.
+\begin{equation}
+	activation = purelin(n)
+\end{equation}
 	\item \textit{Sigmoid neuron}:  neuronii care fac parte din această categorie folosessc o funcție non-liniară pentru a calcula activările lor: funcția sigmoidală. Această funcție este aleasă fiindcă calcularea derivativei ei este ușoară aceasta fiind a caracteristică crucială pentru a face posibilă antrenarea rețelei cu ajutorul algoritmului \textit{baskpropagation}.
 \begin{equation}
-	f(z) = \frac{1}{1 + \mathrm{e}^{-z}}
-\end{equation}
-unde
-\begin{equation}
-	z = b + x_1w_1 +  x_2w_2 + \dots + + x_nw_n
+	a = \frac{1}{1 + \mathrm{e}^{-n}}
 \end{equation}
 \end{itemize}
 
@@ -52,10 +80,11 @@ unde
 \begin{figure}[h!]
     	\centering
 	\captionsetup{justification=centering, margin=2cm}
-	\includegraphics[width=0.5\textwidth]{figures/activation_functions.png}
+	\includegraphics[width=0.7\textwidth]{figures/activation_functions.png}
 	\caption{Funcții de transfer \cite{activationFunctions}}
 	\label{fig:activationFunctions}
 \end{figure}
+
 
 
 \subsection{Rețeaua Neuronală Artificială}
@@ -67,16 +96,95 @@ Popularitatea lor provine din faptul că acestea sunt capabile de a învăța fu
 	\item Regula de învățare/algoritmul de învățare: este mechanismul ales care va îndeplini sarcina ajustării ponderilor în fiecare iterație de antrenare. Alegerea algoritmului corespunzător este de o importanță crucială, și trebuie examinată pentru că un algoritm necorespunzător ar putea rezulta în incapabiliatea de a antrena rețeaua.
 	\item Funcțiile de transfer a neuronilor din fiecare strat
 \end{itemize}
-Rețelele neuronale au o serie de straturi de neuroni, acestea de obicei fiind numerotate de la $L_0$ până la $L_N-1$ unde N este adâncimea rețelei neuronale. Neuronii de pe stratul $L_i$ primesc intrările de la stratul anterior, $L_i-1$. Folosind aceste intrări neuronul aplică funcția lui de transfer, rezultatul fiin activarea neuronului. Această activare se propagă mai departe spre stratul următor, adică $L_i+1$ unde va constitui parte din intrările neuronilor.
+
+% NeuNet with one hidden layer IMAGE
 \begin{figure}[h!]
     	\centering
 	\captionsetup{justification=centering, margin=2cm}
-	\includegraphics[width=0.5\textwidth]{figures/artificialneunet_1hidden.png}
-	\caption{Funcții de transfer \cite{arn}}
+	\includegraphics[width=0.3\textwidth]{figures/artificialneunet_1hidden.png}
+	\caption{O rețea neuronală artificială cu un singur strat ascuns \cite{arn}}
 	\label{fig:activationFunctions}
 \end{figure}
+Rețelele neuronale au o serie de straturi de neuroni, acestea de obicei fiind numerotate de la $L_0$ până la $L_N-1$ unde N este adâncimea rețelei neuronale. Neuronii de pe stratul $L_i$ primesc intrările de la stratul anterior, $L_i-1$. Folosind aceste intrări neuronul aplică funcția lui de transfer, rezultatul fiin activarea neuronului. Această activare se propagă mai departe spre stratul următor, adică $L_i+1$ unde va constitui parte din intrările neuronilor.
 
 
+Între două straturi de neuroni vecini există $R*S$ ponderi, $R$ și $S$ fiind numărul neuronilor pe cele două straturi. De reguă aceste ponderi sunt organizate într-o matrice de ponderi:
+\begin{equation}
+	W = \begin{bmatrix}
+		w_{1,1} && w_{1,2} && \dots && w_{1,R} \\
+		w_{2,1} && w_{2,2} && \dots && w_{2,R} \\
+		\dots && \dots && \dots && \dots\\
+		w_{S,1} && w_{S,2} && \dots && w_{S, R} \\
+	\end{bmatrix}
+\end{equation}
+
+
+
+\subsubsection{Rețele neuronale cu straturi multiple de neuroni}
+O rețea neuronală artificială poate acea mai multe straturi, fiecare strat având o matrice a ponderilor \textbf{W}, un vector al deplasărilor \textbf{b} și un vector de ieșire \textbf{a}. Pentru a distinge matricile ponderilor, vectorii de ieșire, etc., pentru fiecare strat din rețea notăm numărul stratului ca superscript la variabila respectivă. O intrare constantă este atașată fiecărui neuron, asta fiindu-i \textit{deplasarea}. Ieșirile din fiecare strat intermediar reprezintă intrările pentru stratul următor. Astfel, stratul $i$ are $S^{i-1}$ intrări, $S^{i}$ neuroni și o matrice $W^2$ a ponderilor (cu dimensiunile $S^{i}\times S^{i-1}$). Intrarea in stratul $S^{i}$ este $a^{i-1}$, iar ieșirea este $a^{i}$. Această abordare se poate aplica oricărui strat din rețea.\newline
+Straturile pot avea roluri diferite:
+\begin{itemize}
+	\item stratul care produce ieșirea rețelei este numit \textit{strat de ieșire}
+	\item celelalte straturi se numesc \textit{straturi ascunse}
+\end{itemize}
+Ieșirea ultimului strat este ieșirea rețelei, și se notează cu $y$. Rețelele multi-strat sunt foarte eficiente. De obicei acestea au mai multe straturi ascunse cu neuroni sigmoidali, urmate de un strat de neuroni liniari. Fiindcă există mai multe straturi de neuroni cu funcție non-liniară de transfer, rețeaua este capabilă să învețe atât funcții liniare cât și funcții neliniare. Ultimul strat liniar permite rețelei să producă și rezultate care sunt în afara intervalului $[-1, 1]$.
+
+
+\subsection{Antrenarea}
+În această secțiune se va prezenta conceptul de \textit{machine learning} în contextul inteligenței artificiale, și cum învață rețelele neuronale (prin explicarea funcționării algoritmului de propagare inversă a erorii).\newline
+
+\subsubsection{Machine Learning}
+Este un domeniu a științei calculatoarelor care se ocupă cu algoritmi care cunt capabili de a generaliza, a învăța concepte care nu erau programate explicit. În această lucrare se folosesc rețele neuronale artificiale pentru a învăța concepte complexe precum recunoașterea obiectelor din imagini (mai particular se va vorbi despre învățarea supravegheată).
+
+\paragraph{Metodele de învățare}
+
+
+\subparagraph{Învățarea Supravegheată} $(supervised learning)$ presupune în orice moment (pentru orice set de date de intrare) existența unei valori dorite ($target$) pentru fiecare neuron din stratul de ieșire a rețelei. Sistemului i se furnizează seturi de perechi de intrare-ieșire dorită cu ajutorul cărora se calculează mrimi de eroare în funcție de diferența dintre valoarea reală a ieșirii și cea dorită, pe baza cărora se ajustează valorile parametrilor rețelei (interconexiuni și eventual valori de prag ale funcțiilor de activare). 
+
+
+\subparagraph{Învățarea Nesupravegheată} $(unsupervised learning)$ rețeaua extrage singură anumite caracteristici importante a datelor de intrare formând reprezentări interne distincte ale acestora. Rețeaua nu beneficiază de seturi de ieșire dorite, în schimb se utilizează un gen de "competiție" între neuronii elementari care are ca efect modificarea conexiunilor aferente numai neuronului care "câștigă" întrecerea, restul legăturilor rămânând neafectate.
+
+
+\subparagraph{Învățarea folosing un "critic"} $(reinforcement learning)$  este denumită uneori și cu recompensă/pedeapsă ($reward/punishment$). În această situație, rețeaua nu beneficiază de un semnal dorit ca în cazul învățării supravegheate, ci de un semnal care oferă o informație calitativă ilustrând cât de bine funcționează sistemul (informația este binară, de tipul "răspunsul este bun/greșit"). Algoritmii aparținând acestei categorii sunt inspirați într-o mai mare măsură de observații experimentale făcute pe animale și, în esență, funcționează după următorul principiu: dacă urmarea unei anumite acțiuni întreprinse de un sistem capabil să învețe are un efect favorabil, tendința de a produce acțiunea respectivă în situația respectivă este încurajată, în caz contrar este inhibitată.
+
+
+\subsubsection{Antrenarea Rețelelor Neuronale}
+După ce ponderile și deplasările rețelei au fost inițializate, rețeaua este pregătită pentru a fi antrenată. Procesul de antrenare necesită un set mare de valori privind comportarea rețelei: intrări in rețea $p$ și ținta ($target$) t. În timpul antrenării, ponderile și deplasările sunt ajustate iterativ pentru ca rețeaua neuronală să greșească cât mai puțin.\newline
+
+
+\paragraph{Funcția de cost} este funcția folosită pentru specificarea erorii pe care a făcut rețeaua pentru un set dat de intrări-ieșiri dorite. Pentru fiecare stare a rețelei neuronale putem asigna o valoare numerică, cu care putem descrie eroarea. Această valoare se numește \textit{cost}.\newline
+Cu cât costul este mai mare, cu atât rețeaua este mai departe de starea în care am dori să fie. Cum se micșoreză costul, așa rețeaua neuronală ajunge mai aproape de o configurație a parametrilor în care produce predicțiile pe care le-am dori. Valoarea costului este calculată de \textit{funcția de cost}. Zicem că un model este $optimal$ dacă nu putem găsi o altă asignare a valorilor parametrilor rețelei astfel încât să ne producă un cost mai mic.\newline
+Cu toate aceste noțiuni explicate, putem formula ce ar însemna învățarea/antrenarea pentru rețele neuronale: antrenarea este procesul iterativ prin care în fieare iterație costul rețelei neuronale scade, asta însemnând că pas cu pas predicțiile rețelei ajung mai aproape de realitate. În fiecare iterație de antrenare vrem să modificăm valorile ponderilor interconexiunilor și valorilor deplasărilor astfel încât să scadă costul. Pentru a atinge acest scop, de regulă se folosește algoritmul numit $propagarea inversă a erorii$.
+
+
+\paragraph{Propagare Inversă și Metoda Gradientului Negativ}
+Cea mai simplă interpretare a algoritmului de propagare inversă actualizează ponderile rețelei și deplasările în direcția în care funcția de performanță scade cel mai rapid, adică în direcția gradientului negativ.\newline
+Dacă am avea o singură pondere într-o rețea, atunci optimizarea rețelei ar fi destul de simplă: am putea încerca toate valorile pentru ponderea respectivă și am putea alege valoarea cu care primim cel mai bun rezultat. Problema este că dacă numărul de ponderi este mai mare, atunci această abordare devine incredibil de ineficientă. Aici vine ideea vicleană a propagării inverse: nu suntem nevoiți să încercăm toate configurațiile de ponderi și deplasări; de fapt ajunge să le inițializăm la întâmplare, și după aceasta le actualizăm iterativ astfel încât în fiecare iterație să ajungem la un cost mai mic decât în iterația anterioară astfel ajungând la o soluție mai aproape de cea optimă.\newline
+
+
+\subparagraph{Descrierea matematică a metodei gradientului negativ}
+Să fie $F(x)$ o funcție multi-variabilă, care se poate deriva în vecinătatea punctului $a$. Atunci, dacă vrem să aflăm setul variabilelor care care conduc spre minimul funcției, ar trebui să luăm un $pas$ din $a$ în direcția speficicată de gradientul negativ a funcției $F$ în punctul $a$:
+\begin{equation}
+	b = a - \gamma \nabla F(a).
+\end{equation}
+Acesta va asigura, că $F(b) < F(a)$ însemnând ca punctul $b$ este mai aproape de minimul funcției $F$.
+
+
+%visualization of gradient descent
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.9\textwidth]{figures/gradient_descent.png}
+	\caption{Vizualizarea metodei gradientului negativ pentru o funcție cu două variabile \cite{arn}}
+	\label{fig:gradient_descent}
+\end{figure}
+
+Repetând acest proces (calcularea gradientului în punctul curent, și actualizarea parametrilor prin scăderea gradientului), dacă pasul de învățare este destul de mic, atunci vom converga către un minim local. Dacă funcția $F$ este una convexă, atunci metoda gradientului invers ca converga către un punct foarte apropiat de minimul global.
+
+\subparagraph{Propagarea inversă}
+Metoda propagării inverse a erorii este aplicată pe scală largă în domeniul rețelelor neuronale, la procesul de antrenare. Este folosit împreună cu metode de optimizare cum ar fi metoda gradientului negativ.\newline
+Metoda constă din calcularea gradientului funcției de cost $C$, pentru fiecare pondere a rețelei neuronale. După ce gradientul funcției de cost este calculat, acesta este dat metodei de optimizare (gradient negativ), care pe baza gradientului actualizează ponderile interconexiunilor dintre neuroni și deplasările acestora. Astfel în fiecare iterație de antrenare, valoarea erorii este propagată dinspre stratul de ieșire către stratu de intrare, actualizând întreaga rețea.\newline
+Această metodă de antrenare necesită un set de antrenare care conține atât exemple cât și predicția dorită pentru fiecare, pentru că folosind predicțiile dorite putem să calculăm eroarea (sau costul). Când antrenăm o rețea neuronală folosing propagarea inversă, evenimentele se pot separa în două categorii mari:
 
 
 
