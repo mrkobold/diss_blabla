@@ -17,7 +17,7 @@ Segmentarea semantică a unei imagini este procesul prin care imaginea digitală
 \begin{figure}[h!]
     	\centering
 	\captionsetup{justification=centering, margin=2cm}
-	\includegraphics[width=0.9\textwidth]{figures/class_detect_segment.jpeg}
+	\includegraphics[width=1.0\textwidth]{figures/class_detect_segment.jpeg}
 	\caption{Clasificare de imagine, localizare, detecție de obiecte, segmentare semantică \cite{class_detect_segment}}
 	\label{fig:class_detect_semgent}
 \end{figure}
@@ -59,12 +59,24 @@ Pal, Nikhil R and Pal și Sankar K în \cite{pal1993review} prezintă că dintre
 Rețelele neuronale convoluționale sunt foarte similare cu rețelele neuronale profunde clasice: sunt alcătuite din neuroni care au ponderi pe care pot să le învețe. Fiecare neuron are intrări, aplică funcția de activare și propagă mai departe activarea produsă.\newline
 Deci ce se schimbă? Architecturile convoluționale se bazează pe asumpția explicită, că intrările sunt \textbf{imagini}. Această asumpție ne împuternicesc să facem o architectură mai avantajoasă. Astfel pasul de propagare înainte devine mai eficientă iar costurile de antrenare se micșorează dat fiind faptul că numărul parametrilor se micșorează grozav.
 În \cite{csfromuniversity} se prezintă de ce avem nevoie de îmbunătățirea oferită de rețelele convoluționale: rețelele neuronale regulare nu se scalează bine pentru imagini mari. În datase-ul CIFAR-10 imaginile au numai mărimea de 32x32x3 (32 lățime, 32 înălțime, 3 canale de culori), deci un strat complet conectat ar conține 32*32*3 = 3072 ponderi. Chiar dacă acest număr pare maniabil, se vede clar că structura fully-connected nu se scalează pentru imagini mari. De exemplu o poză color, cu o rezoluție de 200x200 pixeli ar avea nevoie de 200*200*3 = 120,000 ponderi.\newline
+
+%image showing how selective search proposes regions
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=1.0\textwidth]{figures/cnn.png}
+	\caption{Un CNN simplu \cite{Yakopcic2016MemristorCD}}
+	\label{fig:selective_search}
+\end{figure}
+
 Rețelele convoluționale elimină problema numerelor mari prin punerea în practică a două idei: folosirea straturilor convoluționale și a straturilor de pooling. Dintre astea două straturile convoluționale fac marea parte a computărilor. Un strat convoluțional este alcătuit de fapt de în set de filtre; fiecare extrage trăsăturile corespunzătoare lui, și construieste o hartă de activări.\newline
 Acum să vorbim despre detecția de obiecte și segmentarea semantică a unei imagini folosind rețele neuronale convoluționale...
 \subsection{Detecția Obiectelor și Segmentarea Imaginilor Folosind Rețele Neuronale}
 În \cite{historyCNN} Dhruv Parthasarathy prezintă că pentru detecția obiectelor și segmentarea semantică, cele mai bune rezultate sunt produse de rețele neuronale tip R-CNN (Regional Convolutional Neural Network).R-CNN poate fi gândită ca o rețea encoder urmată de o altă rețea: o rețea decoder. Prima de obicei este o rețea pre-antrenată de clasificare, cum ar fi CGG/ResNet. A doua parte, decoficatorul are ca sarcină proiectarea semantică a trăsăturilor discriminative (de rezoluție mai mică) care sunt învățate de encoder la spațiul pixel (rezoluția originală a imaginii) pentru a ajunge la o clasificare densă, pe nivel de pixel în imaginea originală.\newline
 Diferența față de clasificare, unde reultatul final este clasificarea singurului obiect important din imagine, detecția și segmentarea nu are nevoie numai de discriminare la nivel de pixel, ci și de un mecanism pentru a proiecta trăsăturile învățate în faze diferite din encoder la spațiul pixel a imaginii originale.\newline
- R-CNN are ca scop găsirea obiectelor principale în imagine (prin identificarea unui bounding box pentru fiecare) precum și clasificarea acestora într-o categorie. Intrarea în R-CNN este o imagine, iar ieșirea este un set de bounding boxes plus lista etichetelor obiectelor din imaginea de la intrare. Dar cum poate să specifice bounding box pentru obiecte? Ideea de bază a R-CNN este foarte intuitivă - se generează o miltitudine de regiuni în imagine și pentru fiecare se verifică cu ce probabilitate se poate clasifica obiectul din interior.\newline
+R-CNN are ca scop găsirea obiectelor principale în imagine (prin identificarea unui bounding box pentru fiecare) precum și clasificarea acestora într-o categorie. Intrarea în R-CNN este o imagine, iar ieșirea este un set de bounding boxes plus lista etichetelor obiectelor din imaginea de la intrare. Dar cum poate să specifice bounding box pentru obiecte? Ideea de bază a R-CNN este foarte intuitivă - folosind algoritmul \textit{selective search} propune un număr foarte mare de regiuni din imagine (acestea având un potențial mare de a conține un obiect care poate fi clasificat) și pentru fiecare execută o clasificare clasică calculând trăsăturile cu ajutorul unui CNN. Ultimul pas este îndeplinit de un SVM (\textit{Support Vector Machine}) care face o clasificare pentru regiune pe baza trăsăturilor extrase de către CNN,\newline
+Astfel un R-CNN este capabil de detecția obiectelor; în plus, R-CNN poate fi construit pe un CNN clasic cum ar fi AlexNet, VGG, GoogLeNet și ResNet.\newline
+
 %image showing how selective search proposes regions
 \begin{figure}[h!]
     	\centering
@@ -73,7 +85,7 @@ Diferența față de clasificare, unde reultatul final este clasificarea singuru
 	\caption{Selective Search \cite{selective_search}}
 	\label{fig:selective_search}
 \end{figure}
-Regiunile astea nu se generează la întâmplare, ci cu ajutorul unui algoritm: Selective Search. Selective search se uită pe imaginea completă, și generează regiunile astfel încât astea să conțină pixelii adiacenți care pot fi grupați împreună, cum ar fi: pixeli cu culoare asemănătoare, texturi asemănătoare, intensitate asemănătoare, etc.\newline
+Regiunile astea nu se generează la întâmplare, ci cu ajutorul unui algoritm numit Selective Search. Selective search se uită pe imaginea completă, și generează regiunile astfel încât astea să conțină pixelii adiacenți care pot fi grupați împreună, cum ar fi: pixeli cu culoare asemănătoare, texturi asemănătoare, intensitate asemănătoare, etc.\newline
 
 Odată ce regiunile (cu potențial mare de a conține un obiect) sunt generate de către selective search, R-CNN le clasifică cu o versiune modificată a rețelei AlexNet. Pe ultimul strat din rețeaua neuronală, se decide dacă regiunea încercată este într-adevăr un obiect, și dacă răspunsul este da, atunci ce fel de obiect?\newline
 Cu toate că R-CNN funcționează coret, are un singur dezavantaj destul de serios, și anume: este foarte lent atât la folosirea propriu zisă cât și la faza de antrenare. Pentru toate ~2000 de regiuni generate cu selective search, se face o propagare înainte prin rețeaua neuronală (AlexNet), ceea ce înseamnă 2000 clasificări per imagine. Acest lucru nu se scalează bine și nu are șansa de a funcționa în timp real pentru captări video.\newline
@@ -82,7 +94,7 @@ Cu toate că R-CNN funcționează coret, are un singur dezavantaj destul de seri
 \begin{figure}[h!]
     	\centering
 	\captionsetup{justification=centering, margin=2cm}
-	\includegraphics[width=0.8\textwidth]{figures/fast_rcnn.png}
+	\includegraphics[width=1.0\textwidth]{figures/fast_rcnn.png}
 	\caption{RoI Pooling \cite{historyCNN}}
 	\label{fig:roi_pooling}
 \end{figure}
@@ -94,17 +106,6 @@ Chiar și cu toate avansările acestea mai era un bottleneck în procesul Fast R
 
 \subsubsection{Segmentare semantică - Mask R-CNN: Faster R-CNN la nivel de pixel}
 În 2017 Kaiming He și o echipă de cercetători de la Facebook au găsit o metodă pentru a extinde Faster R-CNN să fie capabil de segmentare semantică la nivel de pixel. Acest lucru este făcut prin adăugarea unei ramuri capabile de a decide dacă un pixel aparține unui obiect sau nu (aceasta fiind o rețea neuronală complet convoluțională).
-%image meaning of semantic segmentation
-\begin{figure}[h!]
-    	\centering
-	\captionsetup{justification=centering, margin=2cm}
-	\includegraphics[width=0.5\textwidth]{figures/semantic_segmentation.png}
-	\caption{Segmentare semantică \cite{DBLP:journals/corr/HeGDG17}}
-	\label{fig:segmentare_semantica}
-\end{figure}
-Intrarea ramurei de segmentare este o hartă de trăsături, iar ieșirea este o matrice cu 1 în toate pozițiile în care se află pixeli care aparțin obiectului și 0 în rest (o mască binară). Pentru o segmentare cu precizie înaltă, s-a mai făcut o modificare pe Mask R-CNN. Pentru a atinge acest scop, autorii au ajustat RoIPool astfel încât să genereze regiuni mai precise. Algoritmul lor se numește RoIAlign.\newline
-Rădăcina problemei era faptul că când se face extragere de trăsături, inevitabil pierdem informație spațială. Să ne imaginăm că avem o imagine de 128x128 pixeli, iar harta de trăsături construită de CNN a acestei imagini este de 25x25 pixeli. Să ne imaginăm, ca vrem trăsăturile din regiunea colțului din stânga sus, cu o dimensiune de 15x15 pe imaginea originală. Cum putem să selectăm pixelii corespunzători din harta de trăsăuri? Știm că fiecare pixel din imaginea originală corespune a ~25/128 pixeli din imaginea construită. Pentru a selecta 15 pixeli din imaginea originală, selectăm 15x25/128~2.93 pixeli.\newline
-În RoIPool am rotunji jos acest număr și am alege 2 pixeli, cauzând o nealiniere mică. În schimb în RoIAlign se folosește interpolare biliniară penru a găsi răspunsul la întrebarea: \textit{ce se află la pixelul 2.93?}
 \begin{figure}[h!]
     	\centering
 	\captionsetup{justification=centering, margin=2cm}
@@ -112,18 +113,6 @@ Rădăcina problemei era faptul că când se face extragere de trăsături, inev
 	\caption{Segmentare semantică cu Mask R-CNN \cite{DBLP:journals/corr/HeGDG17}}
 	\label{fig:segmentare_semantica cu Mask R-CNN}
 \end{figure}
-
-1 \newline
-2 \newline
-3 \newline
-4 \newline
-5 \newline
-6 \newline
-7 \newline
-8 \newline
-9 \newline
-10 \newline
-11\newline
-12 \newline
-13 \newline
-14 \newline
+Intrarea ramurei de segmentare este o hartă de trăsături, iar ieșirea este o matrice cu 1 în toate pozițiile în care se află pixeli care aparțin obiectului și 0 în rest (o mască binară). Pentru o segmentare cu precizie înaltă, s-a mai făcut o modificare pe Mask R-CNN. Pentru a atinge acest scop, autorii au ajustat RoIPool astfel încât să genereze regiuni mai precise. Algoritmul lor se numește RoIAlign.\newline
+Rădăcina problemei era faptul că când se face extragere de trăsături, inevitabil pierdem informație spațială. Să ne imaginăm că avem o imagine de 128x128 pixeli, iar harta de trăsături construită de CNN a acestei imagini este de 25x25 pixeli. Să ne imaginăm, ca vrem trăsăturile din regiunea colțului din stânga sus, cu o dimensiune de 15x15 pe imaginea originală. Cum putem să selectăm pixelii corespunzători din harta de trăsăuri? Știm că fiecare pixel din imaginea originală corespune a ~25/128 pixeli din imaginea construită. Pentru a selecta 15 pixeli din imaginea originală, selectăm 15x25/128~2.93 pixeli.\newline
+În RoIPool am rotunji jos acest număr și am alege 2 pixeli, cauzând o nealiniere mică. În schimb pentru a găsi răspunsul la întrebarea: \textit{ce se află la pixelul 2.93?}, în architectura RoIAlign se folosește interpolare biliniară.
