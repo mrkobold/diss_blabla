@@ -45,7 +45,7 @@ Neuronul biologic se activează (dă un semnal de ieșire) numai dacă semnalul 
 
 \subsubsection{Descrierea matematică a funcționării unui neuron}
 Întrările unui neuron se pot percepe ca o matrice de numere (fiecare fiind activarea unui neuron de pe stratul anterior) având $R$ elemente. Intrările individuale $p_1, p_2, \dots, p_R$ sunt înmulțite cu ponderile $w_{1,1}, w_{1,2}, \dots, w_{1,R},$ și valorile ponderate se însumează. Suma se poate nota cu \textbf{Wp}, adică produsul scalar al matricei \textbf{W} și vectorul \textbf{p}.\newline
-Neuronul are \textit{deplasarea b (bias)}, care se adună cu intrările ponderate, rezultând arguentul $n$ al funcției de transfer
+Neuronul are \textit{ b (bias)}, care se adună cu intrările ponderate, rezultând arguentul $n$ al funcției de transfer
 \begin{equation}
 f: w_{1,1}p_1 + w_{1,2}p_2 + \dots + w_{1,R}p_R + b = n
 \end{equation}
@@ -121,7 +121,7 @@ Rețelele neuronale au o serie de straturi de neuroni, acestea de obicei fiind n
 
 
 \subsubsection{Rețele neuronale cu straturi multiple de neuroni}
-O rețea neuronală artificială poate acea mai multe straturi, fiecare strat având o matrice a ponderilor \textbf{W}, un vector al deplasărilor \textbf{b} și un vector de ieșire \textbf{a}. Pentru a distinge matricile ponderilor, vectorii de ieșire, etc., pentru fiecare strat din rețea notăm numărul stratului ca superscript la variabila respectivă. O intrare constantă este atașată fiecărui neuron, asta fiindu-i \textit{deplasarea}. Ieșirile din fiecare strat intermediar reprezintă intrările pentru stratul următor. Astfel, stratul $i$ are $S^{i-1}$ intrări, $S^{i}$ neuroni și o matrice $W^2$ a ponderilor (cu dimensiunile $S^{i}\times S^{i-1}$). Intrarea in stratul $S^{i}$ este $a^{i-1}$, iar ieșirea este $a^{i}$. Această abordare se poate aplica oricărui strat din rețea.\newline
+O rețea neuronală artificială poate acea mai multe straturi, fiecare strat având o matrice a ponderilor \textbf{W}, un vector al deplasărilor \textbf{b} și un vector de ieșire \textbf{a}. Pentru a distinge matricile ponderilor, vectorii de ieșire, etc., pentru fiecare strat din rețea notăm numărul stratului ca superscript la variabila respectivă. O intrare constantă este atașată fiecărui neuron, asta fiindu-i \textit{deplasarea (bias)}. Ieșirile din fiecare strat intermediar reprezintă intrările pentru stratul următor. Astfel, stratul $i$ are $S^{i-1}$ intrări, $S^{i}$ neuroni și o matrice $W^2$ a ponderilor (cu dimensiunile $S^{i}\times S^{i-1}$). Intrarea in stratul $S^{i}$ este $a^{i-1}$, iar ieșirea este $a^{i}$. Această abordare se poate aplica oricărui strat din rețea.\newline
 Straturile pot avea roluri diferite:
 \begin{itemize}
 	\item stratul care produce ieșirea rețelei este numit \textit{strat de ieșire}
@@ -139,30 +139,30 @@ Este un domeniu a științei calculatoarelor care se ocupă cu algoritmi care cu
 \paragraph{Metodele de învățare}
 
 
-\subparagraph{Învățarea Supravegheată} $(supervised learning)$ presupune în orice moment (pentru orice set de date de intrare) existența unei valori dorite ($target$) pentru fiecare neuron din stratul de ieșire a rețelei. Sistemului i se furnizează seturi de perechi de intrare-ieșire dorită cu ajutorul cărora se calculează mrimi de eroare în funcție de diferența dintre valoarea reală a ieșirii și cea dorită, pe baza cărora se ajustează valorile parametrilor rețelei (interconexiuni și eventual valori de prag ale funcțiilor de activare). 
+\subparagraph{Învățarea Supravegheată} \textit{(supervised learning)} presupune în orice moment (pentru orice set de date de intrare) existența unei valori dorite ($target$) pentru fiecare neuron din stratul de ieșire a rețelei. Sistemului i se furnizează seturi de perechi de intrare-ieșire dorită cu ajutorul cărora se calculează mrimi de eroare în funcție de diferența dintre valoarea reală a ieșirii și cea dorită, pe baza cărora se ajustează valorile parametrilor rețelei (interconexiuni și eventual valori de prag ale funcțiilor de activare). 
 
 
-\subparagraph{Învățarea Nesupravegheată} $(unsupervised learning)$ rețeaua extrage singură anumite caracteristici importante a datelor de intrare formând reprezentări interne distincte ale acestora. Rețeaua nu beneficiază de seturi de ieșire dorite, în schimb se utilizează un gen de "competiție" între neuronii elementari care are ca efect modificarea conexiunilor aferente numai neuronului care "câștigă" întrecerea, restul legăturilor rămânând neafectate.
+\subparagraph{Învățarea Nesupravegheată} \textit{(unsupervised learning)} rețeaua extrage singură anumite caracteristici importante a datelor de intrare formând reprezentări interne distincte ale acestora. Rețeaua nu beneficiază de seturi de ieșire dorite, în schimb se utilizează un gen de "competiție" între neuronii elementari care are ca efect modificarea conexiunilor aferente numai neuronului care "câștigă" întrecerea, restul legăturilor rămânând neafectate.
 
 
-\subparagraph{Învățarea folosing un "critic"} $(reinforcement learning)$  este denumită uneori și cu recompensă/pedeapsă ($reward/punishment$). În această situație, rețeaua nu beneficiază de un semnal dorit ca în cazul învățării supravegheate, ci de un semnal care oferă o informație calitativă ilustrând cât de bine funcționează sistemul (informația este binară, de tipul "răspunsul este bun/greșit"). Algoritmii aparținând acestei categorii sunt inspirați într-o mai mare măsură de observații experimentale făcute pe animale și, în esență, funcționează după următorul principiu: dacă urmarea unei anumite acțiuni întreprinse de un sistem capabil să învețe are un efect favorabil, tendința de a produce acțiunea respectivă în situația respectivă este încurajată, în caz contrar este inhibitată.
+\subparagraph{Învățarea folosing un "critic"} \textit{(reinforcement learning)} este denumită uneori și cu recompensă/pedeapsă ($reward/punishment$). În această situație, rețeaua nu beneficiază de un semnal dorit ca în cazul învățării supravegheate, ci de un semnal care oferă o informație calitativă ilustrând cât de bine funcționează sistemul (informația este binară, de tipul "răspunsul este bun/greșit"). Algoritmii aparținând acestei categorii sunt inspirați într-o mai mare măsură de observații experimentale făcute pe animale și, în esență, funcționează după următorul principiu: dacă urmarea unei anumite acțiuni întreprinse de un sistem capabil să învețe are un efect favorabil, tendința de a produce acțiunea respectivă în situația respectivă este încurajată, în caz contrar este inhibitată.
 
 
-\subsubsection{Antrenarea Rețelelor Neuronale}
+\subsection{Antrenarea Rețelelor Neuronale}
 După ce ponderile și deplasările rețelei au fost inițializate, rețeaua este pregătită pentru a fi antrenată. Procesul de antrenare necesită un set mare de valori privind comportarea rețelei: intrări in rețea $p$ și ținta ($target$) t. În timpul antrenării, ponderile și deplasările sunt ajustate iterativ pentru ca rețeaua neuronală să greșească cât mai puțin.\newline
 
 
-\paragraph{Funcția de cost} este funcția folosită pentru specificarea erorii pe care a făcut rețeaua pentru un set dat de intrări-ieșiri dorite. Pentru fiecare stare a rețelei neuronale putem asigna o valoare numerică, cu care putem descrie eroarea. Această valoare se numește \textit{cost}.\newline
+\subsubsection{Funcția de cost} Funcția de cost este funcția folosită pentru specificarea erorii pe care a făcut rețeaua pentru un set dat de intrări-ieșiri dorite. Pentru fiecare stare a rețelei neuronale putem asigna o valoare numerică, cu care putem descrie eroarea. Această valoare se numește \textit{cost}.\newline
 Cu cât costul este mai mare, cu atât rețeaua este mai departe de starea în care am dori să fie. Cum se micșoreză costul, așa rețeaua neuronală ajunge mai aproape de o configurație a parametrilor în care produce predicțiile pe care le-am dori. Valoarea costului este calculată de \textit{funcția de cost}. Zicem că un model este $optimal$ dacă nu putem găsi o altă asignare a valorilor parametrilor rețelei astfel încât să ne producă un cost mai mic.\newline
 Cu toate aceste noțiuni explicate, putem formula ce ar însemna învățarea/antrenarea pentru rețele neuronale: antrenarea este procesul iterativ prin care în fieare iterație costul rețelei neuronale scade, asta însemnând că pas cu pas predicțiile rețelei ajung mai aproape de realitate. În fiecare iterație de antrenare vrem să modificăm valorile ponderilor interconexiunilor și valorilor deplasărilor astfel încât să scadă costul. Pentru a atinge acest scop, de regulă se folosește algoritmul numit $propagarea inversă a erorii$.
 
 
-\paragraph{Propagare Inversă și Metoda Gradientului Negativ}
+\subsubsection{Propagare Inversă și Metoda Gradientului Negativ}
 Cea mai simplă interpretare a algoritmului de propagare inversă actualizează ponderile rețelei și deplasările în direcția în care funcția de performanță scade cel mai rapid, adică în direcția gradientului negativ.\newline
 Dacă am avea o singură pondere într-o rețea, atunci optimizarea rețelei ar fi destul de simplă: am putea încerca toate valorile pentru ponderea respectivă și am putea alege valoarea cu care primim cel mai bun rezultat. Problema este că dacă numărul de ponderi este mai mare, atunci această abordare devine incredibil de ineficientă. Aici vine ideea vicleană a propagării inverse: nu suntem nevoiți să încercăm toate configurațiile de ponderi și deplasări; de fapt ajunge să le inițializăm la întâmplare, și după aceasta le actualizăm iterativ astfel încât în fiecare iterație să ajungem la un cost mai mic decât în iterația anterioară astfel ajungând la o soluție mai aproape de cea optimă.\newline
 
 
-\subparagraph{Descrierea matematică a metodei gradientului negativ}
+\paragraph{Descrierea matematică a metodei gradientului negativ}
 Să fie $F(x)$ o funcție multi-variabilă, care se poate deriva în vecinătatea punctului $a$. Atunci, dacă vrem să aflăm setul variabilelor care care conduc spre minimul funcției, ar trebui să luăm un $pas$ din $a$ în direcția speficicată de gradientul negativ a funcției $F$ în punctul $a$:
 \begin{equation}
 	b = a - \gamma \nabla F(a).
@@ -181,10 +181,56 @@ Acesta va asigura, că $F(b) < F(a)$ însemnând ca punctul $b$ este mai aproape
 
 Repetând acest proces (calcularea gradientului în punctul curent, și actualizarea parametrilor prin scăderea gradientului), dacă pasul de învățare este destul de mic, atunci vom converga către un minim local. Dacă funcția $F$ este una convexă, atunci metoda gradientului invers ca converga către un punct foarte apropiat de minimul global.
 
-\subparagraph{Propagarea inversă}
+\paragraph{Propagarea inversă}
 Metoda propagării inverse a erorii este aplicată pe scală largă în domeniul rețelelor neuronale, la procesul de antrenare. Este folosit împreună cu metode de optimizare cum ar fi metoda gradientului negativ.\newline
-Metoda constă din calcularea gradientului funcției de cost $C$, pentru fiecare pondere a rețelei neuronale. După ce gradientul funcției de cost este calculat, acesta este dat metodei de optimizare (gradient negativ), care pe baza gradientului actualizează ponderile interconexiunilor dintre neuroni și deplasările acestora. Astfel în fiecare iterație de antrenare, valoarea erorii este propagată dinspre stratul de ieșire către stratu de intrare, actualizând întreaga rețea.\newline
-Această metodă de antrenare necesită un set de antrenare care conține atât exemple cât și predicția dorită pentru fiecare, pentru că folosind predicțiile dorite putem să calculăm eroarea (sau costul). Când antrenăm o rețea neuronală folosing propagarea inversă, evenimentele se pot separa în două categorii mari:
+Metoda constă din calcularea gradientului funcției de cost $C$, pentru fiecare pondere a rețelei neuronale. După ce gradientul funcției de cost este calculat, acesta este dat metodei de optimizare (gradient negativ), care pe baza gradientului actualizează ponderile interconexiunilor dintre neuroni și deplasările acestora. Astfel în fiecare iterație de antrenare, valoarea erorii este propagată dinspre stratul de ieșire către stratul de intrare, actualizând întreaga rețea.\newline
+Această metodă de antrenare necesită un set de antrenare care conține atât exemple cât și predicția dorită pentru fiecare, pentru că folosind predicțiile dorite putem să calculăm eroarea (sau costul) rețelei pentru un set de intrări. Când antrenăm o rețea neuronală folosing propagarea inversă, evenimentele se pot separa în două faze:\newline
+
+\subparagraph{Propagarea Înainte și Propagare Inversă} constituie propagarea activărilor neuronilor dinspre stratul de intrare către stratul de ieșire și propagarea inversă a erorii calculate de la stratul de ieșire spre stratul de intrare. Când semnalul ajunge la stratul de ieșire, se calculează diferența dintre predicția rețelei neuronale și \textit{target}-ul dorit. Pasul doi este propagarea acestei erori înapot, pentru a afla cum trebuie actualizate ponderile interconexiunilor și deplasările neuronilor.
+
+\subparagraph{Weight Update} este faza în care se aplică următorii pași: înmulțim diferența fiecăruii nod cu semnalele de intrare; așa primim gradientul cu privire la ponderea conexiunii. În al doilea pas scădem o parte a gradientului punctului respectiv din ponderile nodului.\newline
+\begin{equation}
+	W \prime = W-\alpha \nabla ,
+\end{equation}
+unde $\alpha$ este rata de învățare (\textit{learning rate/learning speed}). Valoarea lui $\alpha$ se poate schimba dinamic între iterații de învățare, dar rămâne constant în timpul unei iterații. Valoarea și algoritmul de actualizare a ei trebuie aleasă cu mare grijă. Un $\alpha$ mai mare este echivalent cu luarea unor pași mai mari în jos, spre minimul funcției de cost/performanță. Acest lucru este dorit fiindcă rețeaua învață mai repede, dar are un dezavantaj foarte important: dacă pasul de învățare este una prea mare, atunci se poate întâmpla că pășim peste minimul suprafeței funcției de cost adică pășim peste soluția optimă fără să observăm. Pe de altă parte un $\alpha$ mai mic ne permite a să convergăm cu o acuratețe mai mare de soluția optimă, dar dezavantajul este că se poate bloca la fiecare minim local, nefiind capabil să iasă din punctele aparent bune (se poate opri la un punct foarte ne-optim pe suprafața de cost doar pentru că aceasta este un minim local.
+
+\subsection{Date de Antrenare și Testare}
+Antrenarea este faza în care rețeaua neuronală învață prin actualizarea ponderilor conexiunilor și actualizarea deplasărilor fiecărui neuron. Pentru a realiza antrenarea rețelei neuronale avem nevoie de un set de antrenare suficient de mare alcătuit din imagini etichetate (invățare supravegheată). Rețeaua neuronală face o predicție pe baza unei imagini din setul de antrenare, predicția fiindu-ne vizibilă la stratul de ieșire. Când eticheta ghicită de rețea apare la ieșire, calculăm un cost: diferența dintre predicția rețelei și valoarea adevărată, adică eticheta imaginei corespunzătoare. Având costul calculat suntem capabili să actualizăm ponderile și deplasările, astfel încât să-l micșorăm, folosing algoritmii prezentați mai sus. După o perioadă de antrenare (e.g. 1000 iterații de antrenare) avem o rețea neuronală a cărui ponderi sunt mai aproape de cele optimale decât parametrii rețelei nou-inițializate.\newline
+Acum urmează pasul în care testăm cât de bine funcționează rețeaua neuronală. Avem la îndemână un set mare de imagini etichetate, care n-au fost folosite la antrenare. Comparăm predicțiile rețelei cu etichetele reale ale imaginilor și facem statistici privitoare la precizia predițiilor.
+
+
+\section{Rețele Neuronale Convoluționale}
+Rețelele neuronale convoluționale sunt un tip special a rețelelor neuronale, și s-au demonstrat foarte folositoare pentru recunoașterea, detecția și segmentarea imaginilor iar pentru analizarea semnalelor audio.\newline
+Ele folosesc tipuri de straturi specifice rețelelor convoluționale.
+
+\subsection{Straturi convoluționale}
+Straturile convoluționale sunt alcătuite dintr-un set de filtre convoluționale (\textit{convolutional kernerls)}. După antrenarea rețelei astea devin niște filtre \textit{Gabor-like}.
+
+%Gabor-like filters
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.9\textwidth]{figures/gabor_filters.png}
+	\caption{set of Gabor filters \cite{gabor_filters}}
+	\label{fig:set of Gabor filters}
+\end{figure}
+
+\subsection{Straturi nonlineare (Nonlinearity Layers)}
+Aceste straturi acționează ca filtre nonlineare: intrarea este o matrice sau o imagine, peste care se aplică o activare \textit{non-saturating}. Pot fi de mai multe feluri:
+\begin{itemize}
+	\item ReLU: această funcție ia intrarea după ce aplică funcția de activare $f(x)=max(0, x)$. După ce a aplicat funcția de tranziție, propagă matricea sau imaginea rezultată mai departe,
+	\item Tanh: această funcție ia intrarea și aplică funcția re activare $f(x)=tanh(x)$, după ce rezultatul este propagat mai departe,
+	\item Sigmoid: acest tip de funcție ia intrarea peste care aplică funcția de tranziție $f(x)=exp(-x)+1$.
+\end{itemize}
+
+%non-linear activation functions
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.9\textwidth]{figures/nonlinear_activation_functions.png}
+	\caption{Funcțiile de transfer nonlineare \cite{non_lin_act_fun}}
+	\label{fig:set of Gabor filters}
+\end{figure}
 
 
 
