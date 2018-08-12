@@ -232,6 +232,40 @@ Aceste straturi acționează ca filtre nonlineare: intrarea este o matrice sau o
 	\label{fig:set of Gabor filters}
 \end{figure}
 
+\subsection{Local-Response Normalization Layers}
+Acest tip de strat are ca intrare ieșirea de la stratul anterior și se folosește atunci când valorile de intrare pot fi infinit de mari. Acest strat normalizează într-un mod uniform intrările mari dintr-o regiune. Astfel face posibil ca activările foarte puternice să competizeze în grupuri de neuroni.
+
+\subsection{Pooling Layers}
+Acest tip de strat este specific rețelelor neuronale convoluționale; impune un \textit{downsampling} nonlinear a ieșirilor din stratul precedent. Există mai multe tipuri, cum ar fi max-pooling, average pooling, L2-norm pooling.\newline
+Max-pooling este metoda cea mai des folosită, și funcționează în următorul fel: ca intrare se primeste o matrice sau o imagine. Această matrice sau imagine este partiționată în regiuni care nu se suprapun, regiunile având mărime bine definită. Din fiecare regiune se propagă mai departe numai cea mai puternică activare/cel mai puternic semnal. Acest fenomen are semnificația următoare: dacă într-o regiune am găsit a trăsătură fominantă, atunci poziția exactă a trăsăturii nu contează; este important numai să știm poziția relativă a acestei trăsături față de celelalte trăsături dominante. Beneficiul acestui tip de strat este acea că se reduce mărimea imaginii, extragându-se numai trăsăturile cele mai importante din ea. Ca urmare, după un strat pooling, numărul parametrilor rețelei se micșorează seminficativ fiindcă cantitatea informației din imagine se micșorează și ea.
+
+%max-pooling layer
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.9\textwidth]{figures/max_pol.jpg}
+	\caption{Stratul max-pooling \cite{max_pol}}
+	\label{fig:Stratul max-pooling }
+\end{figure}
+
+\subsection{Fully-Connected Layers}
+Într-o rețea neuronală convoluțională, acest tip de strat execută sarcina predicției la nivel înalt. Se numește fully-connected pentru că neuronii din acest strat sunt interconectați cu fiecare neuron de pe stratul precedent. Activările stratului fully-connected pot fi calculate cu o simplă înmulțire între matrici (intre matricea de intrări și matricea de ponderi) și aplicând matricea de deplasare.
+
+\subsection{Dropout Layer}
+Acest tip de strat este prezent în rețelele neuronale convoluționale pentru a previne fenomenul de \textit{overfitting}. După antrenarea rețelei neuronale cu ajutorul setului de antrenare, scopul nostru este atingerea unei performanțe cât mai înalte pe setul de testare. Pentru a evita \textit{overfitting} și a induce un nivel mai mare de generalizare, straturile dropout fac următorul: iau neuroni cu probabilitate de $p=0.5$, pentru a fi scoase temporal din rețea. Muchiile de intrare și ieșire sunt scoase până la sfârșitul iterației. Astfel rețeaua neuronală are mai puține parametri în fiecare iterație, forțându-l să generalizeze în loc de overfitting. La sfârșitul fiecărei iterații neuronii eliminați sunt reintroduși în rețea cu ponderile neschimbate.
+
+%dropout layer
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.9\textwidth]{figures/dro_out_lay.png}
+	\caption{Drop-out layer \cite{dro_out_lay}}
+	\label{fig:drop-out layer}
+\end{figure}
+
+\subsection{Softmax layer}
+Ultimul strat dintr-o rețea neuronală convoluțională este un \textit{loss layer} folosing abordarea softmax.\newline
+Acest strat are responsabilitatea de a calcula deviația dintre predicția rețelei și realitate (valoarea expectată). 
 
 
 \label{cap:fund-teoretice}
