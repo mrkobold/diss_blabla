@@ -215,6 +215,32 @@ Straturile convoluționale sunt alcătuite dintr-un set de filtre convoluțional
 	\label{fig:set of Gabor filters}
 \end{figure}
 
+Straturile convoluționale au doi parametri pe care le putem modifica pentru a obține modificarea comportamentului fiecărui strat. După ce am ales dimensiunile stratului, trebuie să alegem \textit{stride} și \textit{padding}. \newline
+Stride controlează cum filtrul convoluțional se mișcă pe suprafața matricii de pixeli a imaginii de intrare. \newline
+De exemplu dacă $stride=1$ atunci filtrul este mișcat du pași de un pixel. De obicei valoarea parametrului stride se alege astfel încât imaginea generată de filtrul convoluțional să aibă dimensiuni de numere întregi nu fracții. Să luăm un exemplu: să ne imaginăm o imagine de intrare a carei dimensiune este 7x7 pixeli, și un filtru convoluțional de dimensiunea 3x3 cu un stride de un pixel.
+
+%convolutional layer stride illustration
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.9\textwidth]{figures/con_lay_stride.png}
+	\caption{set of Gabor filters \cite{conv_lay_params}}
+	\label{fig:con_lay_str}
+\end{figure}
+
+
+Pe figura\ref{fig:con_lay_str} putem vedea că matricea rezultată a valorilor produse de stratul convoluțional are dimensiunea de 5x5. Dar ce s-ar întâmpla dacă am folosi un stride de 2 pixeli? În acest caz pe axa orizontală putem să plasăm filtrul în trei poziții, la fel și pe axa verticală. Deci dimensiunile ieșirii filtrului are fi 3x3.\newline
+Putem vedea că cu un stride mai mare ieșirea filtrului se micșorează. Putem observa și faptul că dacă stride ar fi trei, atunci am avea probleme cu plasarea filtrului. De obicei valoarea lui stride este mai mare decât unu dacă vrem ca regiunile receptive să nu se suprapună.\newline
+Să aruncăm o privire și pe parametrul numit \textit{padding}. Înainte de a intra în detalii despre acest parameru, să cedem o situație reală: ce s-ar întâmpla dacă am aplica un filtru de 5x5 pe o imagine de 32x32? Dimensiunile ieșirii ar fi 28x28, deci imaginea se micșorează. Aplicând mai multe filtre convoluționale consecutive pe o imagine, ne lovim de o problemă: dimensiunile imaginii se reduc mai repede decât am dori. În primele straturi a rețelei neuronale dorim să conservăm cât mai multă informație.\newline
+Să zicem că vrem să aplicăm același filtru convoluțional pe același imagine, dar de data asta ne folosim și de un padding, și anume: \textit{zero-padding}. Acesta înseamnă că mărim imaginea originală cu 2 pixeli in fiecare dimensiune, astfel ajungând la dimensiunea de 36x36. Elementelor nou-introduse în matrice le asignăm valoarea de 0.\newline
+Ce am realizat cu introducerea paddingului este că după aplicarea aceluiași filtru (dimensiunea de 5x5 pixeli cu stride=1) imaginea rezultată nu mai este micșorată, ci rezultatul tot o să fie de 32x32.\newline
+Formula pentru a calcula dimensiunile ieșirii pentru un strat convoluțional este
+\begin{equation}
+	O = \frac{W-K+2P}{S}+1
+\end{equation}
+unde K este dimensiunea filtrului, W este dimensiunea imaginii de intrare, P este valoarea paddingului și S este stride.
+
+
 \subsection{Straturi nonlineare (Nonlinearity Layers)}
 Aceste straturi acționează ca filtre nonlineare: intrarea este o matrice sau o imagine, peste care se aplică o activare \textit{non-saturating}. Pot fi de mai multe feluri:
 \begin{itemize}
@@ -237,7 +263,8 @@ Acest tip de strat are ca intrare ieșirea de la stratul anterior și se folose�
 
 \subsection{Pooling Layers}
 Acest tip de strat este specific rețelelor neuronale convoluționale; impune un \textit{downsampling} nonlinear a ieșirilor din stratul precedent. Există mai multe tipuri, cum ar fi max-pooling, average pooling, L2-norm pooling.\newline
-Max-pooling este metoda cea mai des folosită, și funcționează în următorul fel: ca intrare se primeste o matrice sau o imagine. Această matrice sau imagine este partiționată în regiuni care nu se suprapun, regiunile având mărime bine definită. Din fiecare regiune se propagă mai departe numai cea mai puternică activare/cel mai puternic semnal. Acest fenomen are semnificația următoare: dacă într-o regiune am găsit a trăsătură fominantă, atunci poziția exactă a trăsăturii nu contează; este important numai să știm poziția relativă a acestei trăsături față de celelalte trăsături dominante. Beneficiul acestui tip de strat este acea că se reduce mărimea imaginii, extragându-se numai trăsăturile cele mai importante din ea. Ca urmare, după un strat pooling, numărul parametrilor rețelei se micșorează seminficativ fiindcă cantitatea informației din imagine se micșorează și ea.
+Max-pooling este metoda cea mai des folosită, și funcționează în următorul fel: ca intrare se primeste o matrice sau o imagine. Această matrice sau imagine este partiționată în regiuni care nu se suprapun, regiunile având mărime bine definită. Din fiecare regiune se propagă mai departe numai cea mai puternică activare/cel mai puternic semnal. Acest fenomen are semnificația următoare: dacă într-o regiune am găsit a trăsătură fominantă, atunci poziția exactă a trăsăturii nu contează; este important numai să știm poziția relativă a acestei trăsături față de celelalte trăsături dominante.\newline
+Beneficiul acestui tip de strat este acea că se reduce mărimea imaginii, extragându-se numai trăsăturile cele mai importante din ea. Ca urmare, după un strat pooling, numărul parametrilor rețelei se micșorează seminficativ fiindcă cantitatea informației din imagine se micșorează și ea. Astfel numărul ponderilor este redus drastic (75\%) reducând timpul și efortul de computație. Un alt beneficiu introdus de acest tip de strat este să controlează și \textbf{overfitting}ul. Overfitting este fenomenul prin care un model (o rețea neuronală) nu face generalizările necesare despre entitățile pe care trebuie să le recunoască, ci extrage și învațâ trăsături specifice din exemplele de antrenare. Principala simptomă a unei rețele care face overfitting este că pe setul de antrenare are o eficiență de peste 90\% dar numai 50\% pe setul de imagini de testare.
 
 %max-pooling layer
 \begin{figure}[h!]
@@ -249,10 +276,12 @@ Max-pooling este metoda cea mai des folosită, și funcționează în următorul
 \end{figure}
 
 \subsection{Fully-Connected Layers}
-Într-o rețea neuronală convoluțională, acest tip de strat execută sarcina predicției la nivel înalt. Se numește fully-connected pentru că neuronii din acest strat sunt interconectați cu fiecare neuron de pe stratul precedent. Activările stratului fully-connected pot fi calculate cu o simplă înmulțire între matrici (intre matricea de intrări și matricea de ponderi) și aplicând matricea de deplasare.
+Într-o rețea neuronală convoluțională, acest tip de strat execută sarcina predicției la nivel înalt. Se numește fully-connected pentru că neuronii din acest strat sunt interconectați cu fiecare neuron de pe stratul precedent.\newline
+Activările stratului fully-connected pot fi calculate cu o simplă înmulțire între matrici (intre matricea de intrări și matricea de ponderi) și aplicând matricea de deplasare.
 
 \subsection{Dropout Layer}
-Acest tip de strat este prezent în rețelele neuronale convoluționale pentru a previne fenomenul de \textit{overfitting}. După antrenarea rețelei neuronale cu ajutorul setului de antrenare, scopul nostru este atingerea unei performanțe cât mai înalte pe setul de testare. Pentru a evita \textit{overfitting} și a induce un nivel mai mare de generalizare, straturile dropout fac următorul: iau neuroni cu probabilitate de $p=0.5$, pentru a fi scoase temporal din rețea. Muchiile de intrare și ieșire sunt scoase până la sfârșitul iterației. Astfel rețeaua neuronală are mai puține parametri în fiecare iterație, forțându-l să generalizeze în loc de overfitting. La sfârșitul fiecărei iterații neuronii eliminați sunt reintroduși în rețea cu ponderile neschimbate.
+Acest tip de strat este prezent în rețelele neuronale convoluționale pentru a previne fenomenul de \textit{overfitting}. După antrenarea rețelei neuronale cu ajutorul setului de antrenare, scopul nostru este atingerea unei performanțe cât mai înalte pe setul de testare. Pentru a evita \textit{overfitting} și a induce un nivel mai mare de generalizare, straturile dropout fac următorul: iau neuroni cu probabilitate de $p=0.5$, pentru a fi scoase temporal din rețea. Muchiile de intrare și ieșire sunt scoase până la sfârșitul iterației.\newline
+Astfel rețeaua neuronală are mai puține parametri în fiecare iterație, forțându-l să generalizeze în loc de overfitting. La sfârșitul fiecărei iterații neuronii eliminați sunt reintroduși în rețea cu ponderile neschimbate.
 
 %dropout layer
 \begin{figure}[h!]
@@ -269,11 +298,3 @@ Acest strat are responsabilitatea de a calcula deviația dintre predicția rețe
 
 
 \label{cap:fund-teoretice}
-
-Aici se descriu pe scurt aspecte teoretice pe care se bazează lucrarea. Conținutul acestui capitol trebuie gândit pentru un citor care nu e specializat pe domeniul temei și nu cunoaște chestiunile de bază despre subiect. Pentru un cititor specializat, capitolul poate să stabilească un limbaj comun, relativ la termenii care pot fi interpretați diferit. 
-
-Acest capitol nu trebuie gândit și scris nici ca un copy-paste din alte surse, nici ca zona de reglaj a numărului de pagini ale lucrării. Deși va conține chestiuni pe care le-ați studiat și voi și pe care v-ați bazat, el trebuie să fie o compilare a surselor folosite, care să aibă sens și relevanță pentru lucrarea voastră. Trebuie să fie o descriere coerentă și logică a unor aspecte care ușurează sau fac posibilă înțelegerea părților următoare ale lucrării. Nu trebuie intrat insă prea mult în detalii, ci spuse doar chestiunile esențiale. 
-
-Dacă preluați text, figuri, tabela etc. din sursele de documentare, acestea din urmă trebuie indicate explicit. 
-
-Reprezintă cca. 10\% din lucrare.
