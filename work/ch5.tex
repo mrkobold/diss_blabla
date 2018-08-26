@@ -1,8 +1,30 @@
 \chapter{Prezentarea contribuțiilor autorului}
 \label{cap:contributii}
-În acest capitol se face prezentarea contribuțiilor autorului: un studiu comparativ a metodelor existente de detecția obiectelor și segmentarea semantică a imaginilor bazate pe rețele neuronale convoluționale. Se vor analiza algoritmii de inteligență artificială deorece performanța acestora în domeniul prelucrării imaginilor depășește semnificativ orice altă metodă (algoritmi de nivel mai jos, cum ar fi algoritmii de thresholding).
+În acest capitol se face prezentarea contribuțiilor autorului: un studiu comparativ a metodelor existente de detecția obiectelor și segmentarea semantică a imaginilor bazate pe rețele neuronale convoluționale.\newline
+Se vor analiza în detaliu algoritmii care au la bază inteligență artificială deorece performanța acestora în domeniul prelucrării imaginilor depășește semnificativ orice altă metodă (algoritmi de nivel mai jos, cum ar fi algoritmii de thresholding) datorită faptului că rețelele neuronale nu sunt influențate de zgomotul din imagini, dar și pentru că sunt capabile de a produce rezultate în timp real \cite{cat_amz}.
 
-\section{Precizări asupra conținutului și a modului de organizare}
+
+\section{Categorii de algoritmi de segmentarea imaginilor}
+Segmentarea imaginilor este unul dintre cele mai importante procese în domeniul viziunii artificiale moderne. Segmentarea imaginilor înseamnă etichetarea fiecărui pixel, ca aparținând unui obiect din imagine. Segmentele rezultate corespund unităților structurale (obiecte) din scenă. Segmentarea imaginilor este o problemă dificilă, pentru că nu există un model matematic care ar putea descrie bine procesul \cite{cat_amz}.\newline
+Există un număr mare de algoritmi propuse în literatură, care vor fi prezentate în acest capitol. Favorizarea unei metode depinde numai de situație și de tipul de imagine care trebuie segmentat. Nu există nicio metodă universală, care produce rezultate bune pe fiecare tip de imagine. Chiar și alegerea metodei corespunzătoare pentru un tip de imagine este o problemă dificilă. Metode dezvoltate pentru un tip de imagine pot produce rezultate proaste pe alt tip de imagine.\newline
+Technicile de segmentare pot fi plasate în trei clase mai mari:
+\begin{itemize}
+	\item algoritmi clasici bazate pe matematică sau metode statistice
+	\item technici bazate pe inteligență artificială
+	\item alte technici care fie sunt metode hibride, fie nu moștenesc din nicio categorie
+\end{itemize}
+
+Algoritmii clasici includ detecția marginilor obiectelor(\textit{edge/boundary detection)}, methode de thresholding (\textit{characteristic histogram thresholding)}, extragerea regiunilor (\textit{region extraction/region growing)} și abordări semantice și sintactice.\newline
+Metodele de segmentare din domeniul inteligenței artificiale sunt de regulă metode care folosesc rețele neuronale.\newline
+
+\subsection{Technici Bazate pe Rețele Neuronale Artificiale}
+Începând cu anii 1990, rețelele neuronale au apărut și în domeniul prelucrării imaginilor și a viziunii artificiale. Având capabilități dorite (e.g. sunt insensibile la zgomotul din imagini, pot funcționa în timp real) au devenit foarte populare. Bineînțeles, diferite rețele neuronale au fost aplicate cu diferite nivele de succes; rețelele feed-forward back-propagation s-au dovedit a fi cele mai efective.\newline
+Rețelele neuronale capabile de segmentare semantică pot fi împărțite în două categorii: rețele supravegheate și rețele nesupravegheate. Rețelele supravegheate au nevoie de set de antrenare etichetată, adică imagini pe care regiunile de interes sunt notate, având la îndemână și tipul obiectelor din zonele respective. Metodele nesupravegheate (numite și \textit{clustering processes}) sunt semi- sau total automate.
+
+\subsubsection{Rețele supravegheate}
+Rețelele neuronale care sunt antrenare cu învățare supravegheată au nevoie de un operator uman pentru a alege imaginile de antrenare și pentru a le segmenta în \textit{k} regiuni, fiecare fiind etichetat (cu tipul obiectului în regiune). Architectura propusă este antrenată folosind imaginile etichetate ca set de antrenare. După antrenare, rețeaua neuronală va fi capabilă de a segmenta imagini similare, asignând etichete pentru regiuni folosind cunoștințele acumulate la faza de antrenare.
+
+
 
 Titlul acestui capitol nu este unul impus și nici nu corespunde neapărat unui singur capitol. Titlul indică mai degrabă o parte (importantă și centrală, de altfel) a lucrării, în care se prezintă ceea ce s-a realizat efectiv: contribuțiile autorului. Organizarea acestei părți este dependentă și specifică fiecărei lucrări în parte și este stabilită de către fiecare autor după cum i se pare mai potrivit pentru tema lui. Ea poate cuprinde prezentarea unor concepte teoretice (unelte sau tehnici matematice folosite în lucrare, prezentarea sau introducerea unor concepte teoretice etc.), o analiză a diferitelor metode/algoritmi/tehnologii etc. luate în considerare sau dezvoltate de către autor, o prezentare a unui design (mai mult sau mai puțin detaliat) sau chiar detalii a unei eventuale implementări/prototip, dacă e cazul.
 
