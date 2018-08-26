@@ -293,6 +293,11 @@ Astfel rețeaua neuronală are mai puține parametri în fiecare iterație, for�
 \end{figure}
 
 \subsection{Softmax layer}
+De multe ori sarcina ultimului strat dintr-o rețea neuronală convoluțională este de a face o decizie, o clasificare, etc. De exemplu în cazul unei rețele neuronale convoluționale care este capabilă să recunoască un număr scris, pe ultimul strat există zece neuroni de ieșire, fiecare corespunzând de un număr din setul {0, 1, ..., 9}. Pentru a afla predicția rețelei pentru o cifră scrisă, ar ajunge să dăm stratului de intrare imaginea care reprezintă cifra, și să luăm cea mai puternică activare de pe stratul de ieșire. De exemplu dacă pe stratul de ieșire cea mai puternică activare este a neuronului care corespunde cifrei 4, atunci asta înseamnă că cifra introdusă în stratul de intrare este (cu cea mai mare probabilitate) cifra 4.\newline
+Acest tip de strat se numește un strat \textit{max-layer output}. Problema cu acest tip de strat este, că funcția de transfer a neuronilor din ea nu poate fi diferențiată. Din acest motiv la faza de antrenare este important să folosim o funcție de transfer alternativă, și anume funcția \textit{softmax}. Acest tip de strat funcționează aprope la fel ca și un strat \textit{max-output} dar totodată funcția de transfer se poate deriva, însemnând că putem să antrenăm stratul cu \textit{gradient descent}. O altă caracteristică a stratului soft-max este că suma activărilor neuronilor este totdeauna 1.
+
+
+
 Ultimul strat dintr-o rețea neuronală convoluțională este un \textit{loss layer} folosing abordarea softmax.\newline
 Acest strat are responsabilitatea de a calcula deviația dintre predicția rețelei și realitate (valoarea expectată). 
 
