@@ -24,6 +24,40 @@ Rețelele neuronale capabile de segmentare semantică pot fi împărțite în do
 \subsubsection{Rețele supravegheate}
 Rețelele neuronale care sunt antrenare cu învățare supravegheată au nevoie de un operator uman pentru a alege imaginile de antrenare și pentru a le segmenta în \textit{k} regiuni, fiecare fiind etichetat (cu tipul obiectului în regiune). Architectura propusă este antrenată folosind imaginile etichetate ca set de antrenare. După antrenare, rețeaua neuronală va fi capabilă de a segmenta imagini similare, asignând etichete pentru regiuni folosind cunoștințele acumulate la faza de antrenare.
 
+\subsection{Detecția și Localizarea Obiectelor}
+Este o confuzie generală între clasificarea imaginilor și detecția obiectelor din scene. Clasificarea imaginilor (\textit{image classification}) constă în obținerea unei predicții la ieșirea unui sistem referitor la tipul de obiect care era plasat în imaginea de intrare. Pe de altă parte, dacă vrem să identificăm locația obiectelor într-o imagine, și de exemplu să le numărăm numărul instanțelor unui obiect, putem folosi algoritmi de detecția obiectelor (\textit{object detection and localization}).\newline
+Eficiența unui algoritm de localizare se măsoară folosind un algoritm de \textit{Intersect over Union}; când măsurăm performanța rețelei antrenate, la stratul de intrare dăm imagini conținând obiecte care pot fi recunoscute și localizate de rețea, acesta specificând la stratul de ieșire predicția coordonatelor bounding-boxului fiecărui obiect. Aceste coordonate se compară cu cele reale, și se calculează Intersect over Union între dreptunghiurile definite de coordonatele specificate de rețea și dreptunghiurile reale (imaginile fiind etichetate avem la îndemână dreptunghiurile care conțin cu adevărat obiectele din imagini).
+%object detection and localization
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.9\textwidth]{figures/class_detect_segment.jpeg}
+	\caption{Detecția obiectelor \cite{class_detect_segment}}
+	\label{fig:class_detect_segment}
+\end{figure}
+
+\url{https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/object_localization_and_detection.html}
+\url{https://medium.com/nanonets/how-to-do-image-segmentation-using-deep-learning-c673cc5862ef}
+Cinci abordări pentru detecția și localizarea obiectelor vor fi analizate și comparate:
+\begin{itemize}
+	\item RCNN
+	\item Fast RCNN
+	\item Faster RCNN
+	\item Yolo
+	\item SSD
+\end{itemize}
+
+\subsubsection{RCNN}
+RCNN (Regions + CNN) este o metodă care se bazează pe o metodă externă de propunere de regiuni. Problema cu RCNN este că nu este destul de rapid. Pașii de antrenare a RCNN sunt următoarele:
+\begin{itemize}
+	\item se ia o rețea pre-antrenată pe setul de date imagenet
+	\item se face o re-antrenare a ultimului strat complet interconectat cu obiectele care trebuie detectate și o clasă \textit{"no-object"}
+	\item se iau toate propunerile de regiune (cca. 2000 per imagine), care sunt redimensionate pentru a fi potrivite pentru stratul de intrare a rețelei neuronale
+	\item se antrenează un SVM (support vector machine) capabil de a face o clasificare binară pentru fiecare clasă de obiecte care trebuie recunoscute și localizate
+	\item se antrenează un clasificator care ne va da un factor de corecție.
+\end{itemize}
+
+
 
 
 Titlul acestui capitol nu este unul impus și nici nu corespunde neapărat unui singur capitol. Titlul indică mai degrabă o parte (importantă și centrală, de altfel) a lucrării, în care se prezintă ceea ce s-a realizat efectiv: contribuțiile autorului. Organizarea acestei părți este dependentă și specifică fiecărei lucrări în parte și este stabilită de către fiecare autor după cum i se pare mai potrivit pentru tema lui. Ea poate cuprinde prezentarea unor concepte teoretice (unelte sau tehnici matematice folosite în lucrare, prezentarea sau introducerea unor concepte teoretice etc.), o analiză a diferitelor metode/algoritmi/tehnologii etc. luate în considerare sau dezvoltate de către autor, o prezentare a unui design (mai mult sau mai puțin detaliat) sau chiar detalii a unei eventuale implementări/prototip, dacă e cazul.
