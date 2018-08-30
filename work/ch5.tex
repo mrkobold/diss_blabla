@@ -48,14 +48,63 @@ Cinci abordări pentru detecția și localizarea obiectelor vor fi analizate și
 \end{itemize}
 
 \subsubsection{RCNN}
-RCNN (Regions + CNN) este o metodă care se bazează pe o metodă externă de propunere de regiuni. Problema cu RCNN este că nu este destul de rapid. Pașii de antrenare a RCNN sunt următoarele:
+\url{https://towardsdatascience.com/r-cnn-fast-r-cnn-faster-r-cnn-yolo-object-detection-algorithms-36d53571365e}
+Când se face detectarea obiectelor o problemă cu care ne întâlnim inevitabil este faptul că în majoritatea cazurilor nu o să fie numai un bounding box pentru o scenă pentru că imaginea respectivă poate să conțină numeroase obiecte de interes și nu putem să știm dinainte câte. Din acest motiv nu putem să folosim o rețea neuronală standard extinsă cu un strat fully connected.\newline
+RCNN (Regions + CNN) este o metodă care se bazează pe o metodă externă de propunere de regiuni care găsește regiunile de interes, și le găsește repede. Algoritmul extern de propunere de regiuni se numește \textit{selective search}.\newline
+Chiar și accelerând pasul de generare de regiuni de interes, problema cu RCNN este că nu este destul de rapid.\newline
+Cu ajutorul selective search se generează 2000 de regiuni cu potențial mare de a conține vreun obiect de interes. Regiunile generate de selective search sunt numite propuneri de regiuni (\textit{region proposals}). Aceste propuneri de regiuni sunt introduse într-o rețea convoluțională care produce un vector de trăsături. Astfel rețeaua convoluțională funcționează ca un extractor de trăsături, iar stratul de ieșire conține trăsăturile extrase care sunt introduse într-un support vector machine pentru a clasifica prezența unui obiect în propunerea de regiune.\newline
+RCNN are și câteva dezavantaje:
 \begin{itemize}
-	\item se ia o rețea pre-antrenată pe setul de date imagenet
-	\item se face o re-antrenare a ultimului strat complet interconectat cu obiectele care trebuie detectate și o clasă \textit{"no-object"}
-	\item se iau toate propunerile de regiune (cca. 2000 per imagine), care sunt redimensionate pentru a fi potrivite pentru stratul de intrare a rețelei neuronale
-	\item se antrenează un SVM (support vector machine) capabil de a face o clasificare binară pentru fiecare clasă de obiecte care trebuie recunoscute și localizate
-	\item se antrenează un clasificator care ne va da un factor de corecție.
+	\item chiar și cu accelerarea pasului de propunere de regiuni timpul de antrenare a rețelei este lung, pentru că pentru fiecare imagine este nevoie de clasificarea a 2000 de propuneri de regiuni
+	\item nu poate funcționa în timp real, pentru că detectarea obiectelor durează 47 de secunde în medie pentru imagine
+	\item algoritmul selective search nu poate fi îmbunătățit, nici nu poate să învețe. Asta poate duce la generarea neadecvată a propunerilor de regiuni.
 \end{itemize}
+
+\subsubsection{Fast RCNN}
+\url{https://towardsdatascience.com/r-cnn-fast-r-cnn-faster-r-cnn-yolo-object-detection-algorithms-36d53571365e}
+Autorii articolului de RCNN au rezolvat câteva din problemele modelului RCNN pentru a construi un algoritm mai rapid pentru detectarea obiectelor. Acest algoritm îmbunătăți se numește Fast RCNN și este similar cu RCNN. Însă în loc de introducerea propunerilor de regiuni într-un CNN, se introduc imaginile în CNN pentru a genera o hartă de trăsături extrase cu o rețea convoluțională. Din această mapă identificăm propunerile de regiuni și folosim un strat softmax pentru a produce predicții de clasificare pentru regiuni.\newline
+Fast RCNN este mai rapid decât predecesorul lui pentru că nu trebuie să introducem 2000 propuneri de regiuni în rețeaua convoluțională de fiecare dată; în schimb operația de convoluție se face o dată per imagine, pentru a genera harta trăsăturilor convoluționale.
+
+%RCNN vs Fast RCNN training and testing times
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.9\textwidth]{figures/rcnn_vs_fast_rcnn_time.png}
+	\caption{Diferența semnificativă dintre timpul de antrenare și testare între RCNN și Fast RCNN \cite{rcnn_vs_fast_rcnn}}
+	\label{fig:class_detect_segment}
+\end{figure}
+Din acest grafic putem vedea că diferența dintre vitezele a rețelelor este semnificativă. Când ne uităm la performanța rețelei Fast RCNN observăm că performanța lui este mult mai bună fără folosirea metodei de propunere de regiuni. Deci algoritmul de propunere de regiuni este un bottleneck pentru Fast RCNN, afectând semnificativ performanța.
+
+\subsubsection{Faster RCNN}
+Ambii algoritmi de mai sus (RCNN și Fast RCNN) folosesc algoritmul selective search pentru a găsi propuneri de regiuni - regiuni cu potențial mare de a conține vreun obiect de interes. Acest algoritm este unul lent, consumă mult timp deci afectează performanța rețelei.\newline
+Faster RCNN este similar cu Fast RCNN privind că și aici din imaginea introdusă se generează o hartă de trăsături convoluționale. În schimb aici nu se folosește selective search pentru a găsi regiunile de interes în harta de trăsături; în loc de acesta, o rețea separată este antrenată pentru a găsi predicții pentru coordonaterle regiunilor de interes. Regiunile previzionate sunt remodelate cu un strat RoI pooling și rezultatul este clasificat.
+
+%RCNN vs Fast RCNN vs Faster RCNN testing time
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.8\textwidth]{figures/faster_rcnn_speed.png}
+	\caption{Diferența dintre timpul de testare între  Fast RCNN și  Faster RCNN \cite{rcnn_vs_fast_rcnn}}
+	\label{fig:class_detect_segment}
+\end{figure}
+Se vede că Faster RCNN este mult mai rapid decât predecesorii săi. Deja se poate folosi și pentru detectare de obiecte în timp real.
+
+\subsubsection{YOLO - You Only Look Once}
+Până aici fiecare algoritm folosește regini pentru a localiza obiectele de interes în imagine. În loc să se uită la imaginea întreagă, rețeaua încearcă să găsească obiecte în părți care au potențial mare de a conține vreun obiect de interes.\newline
+YOLO sau You Only Look Once este un algoritm de detectare de obiecte foarte diferit de algoritmii pe care le-am văzut până acum, fiindcă o singură rețea convoluțională este folosit atât pentru predicția bounding boxurilor cât și pentru clasificarea obiectelor din acestea.
+
+%YOLO functioning #1
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.8\textwidth]{figures/yolo1.png}
+	\caption{YOLO \cite{rcnn_vs_fast_rcnn}}
+	\label{fig:class_detect_segment}
+\end{figure}
+YOLO ia imaginea întreagă, o împarte într-o matrice de SxS, și în fiecare celulă a matricei ia $m$ bounding boxuri. Pentru fiecare rețeua calculează o probabilitățile de a conține diferitele obiectele de interes. Regiunile care au probabilitatea de a conține vreun obiect este peste un anumit prag sunt alese și folosite pentru localizarea obiectului în imagine.\newline
+YOLO este mult mai rapid (45 de cadre pe secundă) decât alte algoritmi de detectare de obiecte dezavantajul lui fiind obiectele mici din imagine.
+
+
 
 
 
