@@ -26,7 +26,18 @@ Rețelele neuronale care sunt antrenare cu învățare supravegheată au nevoie 
 
 \subsection{Detecția și Localizarea Obiectelor}
 Este o confuzie generală între clasificarea imaginilor și detecția obiectelor din scene. Clasificarea imaginilor (\textit{image classification}) constă în obținerea unei predicții la ieșirea unui sistem referitor la tipul de obiect care era plasat în imaginea de intrare. Pe de altă parte, dacă vrem să identificăm locația obiectelor într-o imagine, și de exemplu să le numărăm numărul instanțelor unui obiect, putem folosi algoritmi de detecția obiectelor (\textit{object detection and localization}).\newline
-Eficiența unui algoritm de localizare se măsoară folosind un algoritm de \textit{Intersect over Union}; când măsurăm performanța rețelei antrenate, la stratul de intrare dăm imagini conținând obiecte care pot fi recunoscute și localizate de rețea, acesta specificând la stratul de ieșire predicția coordonatelor bounding-boxului fiecărui obiect. Aceste coordonate se compară cu cele reale, și se calculează Intersect over Union între dreptunghiurile definite de coordonatele specificate de rețea și dreptunghiurile reale (imaginile fiind etichetate avem la îndemână dreptunghiurile care conțin cu adevărat obiectele din imagini).
+%IoU Intersect over Union
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.5\textwidth]{figures/iou.png}
+	\caption{Detecția obiectelor \cite{class_detect_segment}}
+	\label{fig:class_detect_segment}
+\end{figure}
+
+\subsubsection{IoU - Intersect over Union}
+Eficiența unui algoritm de localizare se măsoară folosind un algoritm de \textit{Intersect over Union}. Intersect over Union este o metodă pentru a evalua cât de aproape sunt predicțiile unui algoritm de detecția obiectelor de adevăr. \newline
+Când vrem să măsurăm performanța rețelei antrenate, la stratul de intrare dăm imagini conținând obiecte care pot fi recunoscute și localizate de rețea, acesta specificând la stratul de ieșire predicția coordonatelor bounding-boxului fiecărui obiect. Aceste coordonate se compară cu cele reale, și se calculează Intersect over Union între dreptunghiurile definite de coordonatele specificate de rețea și dreptunghiurile reale (imaginile fiind etichetate avem la îndemână dreptunghiurile care conțin cu adevărat obiectele din imagini).
 %object detection and localization
 \begin{figure}[h!]
     	\centering
@@ -87,11 +98,44 @@ Faster RCNN este similar cu Fast RCNN privind că și aici din imaginea introdus
 	\caption{Diferența dintre timpul de testare între  Fast RCNN și  Faster RCNN \cite{rcnn_vs_fast_rcnn}}
 	\label{fig:class_detect_segment}
 \end{figure}
-Se vede că Faster RCNN este mult mai rapid decât predecesorii săi. Deja se poate folosi și pentru detectare de obiecte în timp real.
+Se vede că Faster RCNN este mult mai rapid decât predecesorii săi. Deja se poate folosi și pentru detectare de obiecte în timp real.\newline
+Rețelele detaliate până aici au o trăsătură în comun: au o parte a rețelei dedicată pentru propunerea de regiuni, urmată de un clasificator performant. Aceste metode sunt capabile de o precizie ridicată, dar au dezavantajul că funcționează foarte lent (low frame-rate), însemnând că nu pot folosite în dispozitive embedded.\newline
+O altă modalitate de a face detectare de obiecte este combinarea celor două pași (propuneri de regiuni și clasificare) într-o singură rețea. Acest scop poate fi atins cu o rețea care are un set predefinit de regiuni pentru găsirea obiectelor.\newline
+O metodă pentru a refolosi rezultatul calculelor deja făcute la pasul de clasificare pentru localizare de obiecte este de a lua activările de la ultimul strat convoluțional. Aici încă avem informație spațială dar reprezentată într-o versiune mai mică decât în imaginea originală. De exemplu o imagine de 640x480x3 încărcată la stratul de intrare, pe ultimul strat convoluțional poate să producă ieșirea de dimensiunile 13x18x2048.\newline
+Deci pe ultimul strat fiecare "pixel" reprezintă o zonă mai mare a imaginii de intrare, deci putem folosi aceste celule pentru a deduce poziția obiectelor.
+
+%"pixels" from last layer correspond to larger areas on the original image
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.8\textwidth]{figures/last_con_lay_to_inp_img.png}
+	\caption{Diferența dintre timpul de testare între  Fast RCNN și  Faster RCNN \cite{rcnn_vs_fast_rcnn}}
+	\label{fig:class_detect_segment}
+\end{figure}
+
+Un detaliu la care trebuie să fim atenți este că la folosirea fiecărui strat de pooling, pierdem o porțiune semnificativă de informație spațială.\newline
+La acest pas putem folosi un strat convoluțional de 1x1 pentru a efectua o clasificare a fiecărei celule (e.g. pieton sau fundal), dar putem atașa încă un strat convoluțional sau fully-connected pentru a afla o predicție pentru cele 4 numere care descriu un bounding-box pentru obiectul conținut în celulă. Astfel primim clasificarea obiectului din regiune dar și locația sa.\newline
+Este greșit să ne gândim ca și imaginea de intrare ar fi împărțită în celule înaintea începerii algoritmului. Ce se întâmplă de fapt este că fiecare strat reprezintă imaginea de intrare cu rezoluție mai mică, dar adâncime crescătoare. La antrenare facem a reconciliere între eticheta predefinită a imaginii și celulele virtuale (celulele pot să se suprapună).\newline
+Familia detectoarelor de obiecte care folosesc această strategie:
+\begin{itemize}
+	\item SSD: folosește diferite matrice de activare (\textit{activation map}) pentru predicția claselor și a regiunilor
+	\item YOLO: foloseste o singură matrice de activare pentru ambiele sarcini
+	\item R-FCN (Region based Fully-Convolutional Neural Networks): funcționează mai rapid decât metodele (R-CNN, Fast R-CNN, etc) pentru că face puține calcule per celulă și este fully-conbolutional (conține numai straturi convoluționale).
+\end{itemize}
+Strategia acestor metode:
+\begin{enumerate}
+	\item se antrenează un CN cu regresiune (pentru bounding box) și clasificare (cu loss function)
+	\item de obicei funcțiile de eroare sunt mai complexe pentru că trebuie să se descurce cu mai multe obiective (clasificare, regresiune, verificarea existenței unui obiect, etc.)
+	\item culegerea activărilor de la un strat particular pentru a fi capabil de clasificare și localizare cu un strat FC sau un alt strat convoluțional
+	 \item la pasul de prediction se folosesc algoritmi ca și \textit{non-maxima suppression} pentru a filtra multiple regiuni în jurul aceluiași obiect
+	\item la stagiul de antrenare se folosesc algoritmi precum IoU (\textit{Intersect over Union}) pentru a afla corectitudinea localizării obiectului.
+\end{enumerate}
+
 
 \subsubsection{YOLO - You Only Look Once}
 Până aici fiecare algoritm folosește regini pentru a localiza obiectele de interes în imagine. În loc să se uită la imaginea întreagă, rețeaua încearcă să găsească obiecte în părți care au potențial mare de a conține vreun obiect de interes.\newline
-YOLO sau You Only Look Once este un algoritm de detectare de obiecte foarte diferit de algoritmii pe care le-am văzut până acum, fiindcă o singură rețea convoluțională este folosit atât pentru predicția bounding boxurilor cât și pentru clasificarea obiectelor din acestea.
+YOLO sau You Only Look Once este un algoritm de detectare de obiecte foarte diferit de algoritmii pe care le-am văzut până acum, fiindcă o singură rețea convoluțională este folosit atât pentru predicția bounding boxurilor cât și pentru clasificarea obiectelor din acestea.\newline
+Acest detector are o precizie un pic mai mică dar funcționează foarte rapid (este capabil de detectare în timp real).
 
 %YOLO functioning #1
 \begin{figure}[h!]
@@ -101,8 +145,33 @@ YOLO sau You Only Look Once este un algoritm de detectare de obiecte foarte dife
 	\caption{YOLO \cite{rcnn_vs_fast_rcnn}}
 	\label{fig:class_detect_segment}
 \end{figure}
-YOLO ia imaginea întreagă, o împarte într-o matrice de SxS, și în fiecare celulă a matricei ia $m$ bounding boxuri. Pentru fiecare rețeua calculează o probabilitățile de a conține diferitele obiectele de interes. Regiunile care au probabilitatea de a conține vreun obiect este peste un anumit prag sunt alese și folosite pentru localizarea obiectului în imagine.\newline
-YOLO este mult mai rapid (45 de cadre pe secundă) decât alte algoritmi de detectare de obiecte dezavantajul lui fiind obiectele mici din imagine.
+
+\paragraph{Ideea Principală}
+Ideea din spatele acestui detector este că rulăm fiecare imagine printr-un model CNN și primim bounding boxes pentru obiecte într-un singur pas. Prima dată imaginea este redimensionată la rezoluția de 448x448, apoi încărcată în rețea. Ieșirea rețelei este filterată de un algoritm \textit{non-max suppression}.
+Ieșirea modelului este un tensor batch de dimensiunile 7x7x30, și următorarele informații sunt codificate:
+\begin{itemize}
+	\item 2 definiții de bounding box: numere care identifică dreptungiul în care se află obiectul de interes (x, y, lățime, înălțime)
+	\item 20 de probabilități de clase
+\end{itemize}
+Rețeaua este compuse folosind 9 straturi convoluționale, iar după ultimul strat de max-pool, din imaginea originală de 448x448 obținem o imagine de 7x7.\newline
+Această ieșire de 7x7 poate fi considerată ca un grid de 7x7 reprezentând imaginea originală, unde fiecare celulă are 2 definiții de bounding box și 20 de probabilități de clase (celulele având o probabilitate de să aparțină unei clase din cele 20). Putem observa că această informație ne ajută și la detectarea clasei de obiect în care aparține entitatea din celulele respective.
+
+%YOLO grid with possibilities
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.7\textwidth]{figures/yolo_cell_class.png}
+	\caption{YOLO \cite{rcnn_vs_fast_rcnn}}
+	\label{fig:class_detect_segment}
+\end{figure}
+
+În ultimul pas folosind \textit{thresholding} și \textit{non-maxima suppression} putem filtra regiunile care nu sunt detectări valide.
+
+
+More about YOLO if needed only
+\url{https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/single-shot-detectors/yolo.html}
+
+\subsubsection{Multibox Single Shot Detector (SSD)}	
 
 
 
