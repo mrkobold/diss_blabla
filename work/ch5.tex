@@ -24,7 +24,7 @@ Rețelele neuronale capabile de segmentare semantică pot fi împărțite în do
 \subsubsection{Rețele supravegheate}
 Rețelele neuronale care sunt antrenare cu învățare supravegheată au nevoie de un operator uman pentru a alege imaginile de antrenare și pentru a le segmenta în \textit{k} regiuni, fiecare fiind etichetat (cu tipul obiectului în regiune). Architectura propusă este antrenată folosind imaginile etichetate ca set de antrenare. După antrenare, rețeaua neuronală va fi capabilă de a segmenta imagini similare, asignând etichete pentru regiuni folosind cunoștințele acumulate la faza de antrenare.
 
-\subsection{Detecția și Localizarea Obiectelor}
+\subsection{Algoritmi de Detectarea și Localizarea Obiectelor}
 Este o confuzie generală între clasificarea imaginilor și detecția obiectelor din scene. Clasificarea imaginilor (\textit{image classification}) constă în obținerea unei predicții la ieșirea unui sistem referitor la tipul de obiect care era plasat în imaginea de intrare. Pe de altă parte, dacă vrem să identificăm locația obiectelor într-o imagine, și de exemplu să le numărăm numărul instanțelor unui obiect, putem folosi algoritmi de detecția obiectelor (\textit{object detection and localization}).\newline
 %IoU Intersect over Union
 \begin{figure}[h!]
@@ -172,6 +172,38 @@ More about YOLO if needed only
 \url{https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/single-shot-detectors/yolo.html}
 
 \subsubsection{Multibox Single Shot Detector (SSD)}	
+Detectorul SSD diferă de alte detectoare single-shot prin folosirea mai multor straturi care asigură o acuratețe mai bună în cazul obiectelor de mărimi diferente (cum straturile devin mai "adânci", ei sunt capabile de a observa obiecte mai mari).\newline
+De obicei primul pas dintr-un single shot detector este un VGG pe un Resnet pre-antrenat care este convertit într-o rețea complet convoluțională. După aceasta se atașează câteva straturi convoluționale adiționale, ceea ce ne ajută la tratarea obiectelor mai mari. Architectura SSD se poate folosi de fapt împreună cu orice model bazat pe o rețea adâncă.\newline
+Un lucru important de observat este faptul că după ce imaginea este introdusă în rețeaua VGG, câteva straturi convoluționale sunt adăugate pentru a produce hărți de trăsături de dimensiunile 19x19, 10x10, 5x5, 3x3, 1x1. Acestea împreună cu matricea de trăsături de 38x38 produsă de rețeaua VGG sunt matricele de trăsături folosite pentru a estima bounding boxes pentru obiectele de interes.\newline
+Câteva activări sunt luate de la rețea și pasate într-o sub-rețea specializată care funcționează ca un clasificator și localizator. În faza de predicție se folosește algoritmul non-maxima suppression pentru a filtra multiple bounding-boxuri per obiect care pot să apară.
+
+
+\subsection{Algoritmi de Segmentare Semantică}
+Acum urmează să studiem detaliat algoritmii de segmentare semantică a imaginilor (\textit{semantic segmentation)}. Segmentare semantică este procedura prin care fiecărui pixel dintr-o imagine îi asignăm o etichetă care precizează cărui obiect aparține. Astfel algoritmii de segmentare semantică produc un \textit{map} a tuturor obiectelor detectate din imagine. Pe paginile următoare vom vedea cum funcționează diferite algoritmi bazate pe rețele neuronale convoluționale.
+
+\subsubsection{Rețele Complet Convoluționale pentru Segmentare Semantică}
+O rețea comple convoluțională seamănă foarte mult cu o rețea convoluțională normală, singura diferență fiind faptul că și ultimul strat este schimbat de încă un strat convoluțional. Ideea este că se capturează contextul global a scenei (să știm ce avem pe imagine și totodată să primim estimări despre locația obiectelor de interes).
+
+%image segmentation fully convolutional
+\begin{figure}[h!]
+    	\centering
+	\captionsetup{justification=centering, margin=2cm}
+	\includegraphics[width=0.7\textwidth]{figures/img_seg_ful_conv.png}
+	\caption{Segmentare semantică \cite{rcnn_vs_fast_rcnn}}
+	\label{fig:class_detect_segment}
+\end{figure}
+
+În 1990 rețelele neuronale convoluționale s-au dovedit folositoare pentru segmentarea semantică a imaginilor. Proprietățile lor dorite (eficiența nu se degradează în cazul imaginilor cu zgomot, capabile de a funcționa în timp real) au dus la aparența a multor modele și architecturi convoluționale. A varietate imensă de rețele convoluționale au fost aplicate pentru detectarea obiectelor și segmentarea semantică, cu mare succes. În această lucrare vom arunca o privire la rețele feed-forward back-propagation, Kohonen self organising maps, Hopfield neural networks, constraint satisfaction neural networks.\newline
+Algoritmii de segmentare semantică bazate pe rețele neuronale pot fi împărțite în două categorii mari: algoritmi supravegheate și algoritmi nesupravegheate. Metodele supravegheate au nevoie de un set de antrenare etichetat (de oameni), adică un set de imagini segmentate de către experți humani. Pe de altă parte algoritmii nesupravegheați (sau procese de clustering) pot fi automate.
+
+\subsubsection{Modele cu Învățare Supravegheată}
+
+
+
+
+
+
+
 
 
 
@@ -189,48 +221,11 @@ Trebuie remarcat însă faptul că această parte reprezintă contribuția perso
 
 \section{Examples: lists, figures, tables, equations}
 
-Așa arată o listă de elemente nenumerotate:
-\begin{itemize}
-  \item element 1
-  \item element 2
-  \item \dots
-\end{itemize}
-
-
-Așa arată o listă de elemente numerotare:
-\begin{itemize}
-  \item element 1
-  \item element 2
-  \item \dots
-\end{itemize}
-
-
-Așa arată o listă în text: 
-\begin{inparaenum}[(\itshape 1 \upshape)]
-  \item element 1, 
-  \item element 2, 
-  \item \dots
-\end{inparaenum}
 
 \textbf{Atenție}: orice tabel, figura sau ecuație (formulă) trebuie referite \textit{explicit} în text explicit (de genul: în Figura X este ulustrat \dots, în Tabelul Y se poate vedea \dots), pentru că Latex le poate plasa chiar și pe altă pagină decât acolo unde vrem noi să ne referim la ele. Vedeți exemple de mai jos!
 
 Tabelul~\ref{table:example} ilustrează un exemplu de tabel. Un editor on-line de tabele poate fi găsit la \url{http://www.tablesgenerator.com/}. 
 
-\begin{table}[t]
-\centering                          % tabel centrat 
-\begin{tabular}{|c|c|c|c|}          % 4 coloane centrate 
-\hline\hline                        % linie orizontala dubla
-Case & Method\#1 & Method\#2 & Method\#3 \\ [0.5ex]   % inserare tabel
-%heading
-\hline                              % linie orizontal simpla
-1 & 50 & 837 & 970 \\               % corpul tabelului 
-2 & 47 & 877 & 230 \\
-3 & 31 & 25 & 415 \\[1ex]           % [1ex] adds vertical space
-\hline                              
-\end{tabular}
-\caption{Nonlinear Model Results}   % titlul tabelului
-\label{table:example}                % \label{table:nonlin} introduce eticheta folosita pentru referirea tabelului in text; referirea in text se va face cu \ref{table:nonlin}
-\end{table}
 
 În Figura~\ref{fig:exemplu} 
 
