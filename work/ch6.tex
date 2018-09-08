@@ -1,6 +1,57 @@
 % \chapter{Tests and Results}
 \chapter{Rezultate teoretice și experimentale}
 \label{cap:rezultate}
+Comparația corectă a diferitelor algoritmi de segmentare semantică a imaginilor și de detecția obiectelor este o sarcină foarte grea; nu se poate stabili care dintre modele este cel mai bun. În aplicațiile din viața reală, alegerea modelului potrivit se face prin balansarea capabilităților ei: viteza de funcționare și acuratețe. Pe lângă alegerile referitoare la detector, câțiva alți factori trebuie luate în considerare când vorbim de comparație:
+
+% enumerate shit which is crucial for making a good object detector
+\begin{enumerate}
+	\item rezoluția imaginii de intrare
+	\item numărul propunerilor generate pentru a fi clasificate
+	\item setul de antrenare
+	\item extractorul de trăsături folosit
+	\item funcția de cost pentru antrenare de localizare
+	\item configurarea antrenării (viteza de antrenare a rețelei neuronale, mărimea loturilor de antrenare, micșorarea ratei de învățare)
+	\item etc.
+\end{enumerate}
+
+Mai rău, technologia evoluează atât de repede încât orice comparație devine încechită destul de repede.\newline
+În această parte a lucrării sumarizăm rezultatele din articole individuale, pentru a arăta imaginea de ansamblu a algoritmilor.
+
+\section{Rezultate de Performanță}
+În această secțiune sumarizăm performanțele diferitelor modele raportate în articolele corespunzătoare.\newline
+Metrica pentru măsurarea performanței în contextul detecției obiectelor este \textit{mAP (mean Average Precision)}. Este definit ca \textit{the average of the maximum precisions at different recall values}, adică media maximelor precizii la diferite valori de rechemare. Pentru a înțelege acest concept, trebuie mai întâi să recapitulăm conceptele de precizie și rechemare mai întâi.
+\paragraph{Precizie} măsoară acuratețea predicțiilor, i.e. procentul predicțiilor corecte.
+\begin{equation}
+Precizie = \frac{TruePositive}{TruePositive + FalsePositive}.
+\end{equation}
+
+\paragraph{Recall (rechemare)} măsoară cât de precise sunt identificările pozitive.
+\begin{equation}
+Recall = \frac{TruePositive}{TruePositive + FalsNegative}.
+\end{equation}
+
+\paragraph{AP} \textit{Average Precision} este media a mai multor IoU pentru toate categoriile de obiecte.
+
+Următorul tabel prezintă preciziile diferitelor rețele de detectare de obiecte:
+
+\begin{center}
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    Method & mAP \\ \hline
+    Monday & 11C \\ \hline
+    Tuesday & 9C  \\ \hline
+    Wednesday & 10C \\  \hline
+    \end{tabular}
+\end{center}
+
+
+
+\subsection{Faster R-CNN}
+
+
+
+
+
 
 Împreună cu partea de prezentare a proiectului, trebuie să reprezinte aproximativ 70\% din lucrare. 
 
