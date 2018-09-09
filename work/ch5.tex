@@ -47,8 +47,6 @@ Când vrem să măsurăm performanța rețelei antrenate, la stratul de intrare 
 	\label{fig:class_detect_segment}
 \end{figure}
 
-\url{https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/object_localization_and_detection.html}
-\url{https://medium.com/nanonets/how-to-do-image-segmentation-using-deep-learning-c673cc5862ef}
 Cinci abordări pentru detecția și localizarea obiectelor vor fi analizate și comparate:
 \begin{itemize}
 	\item RCNN
@@ -59,7 +57,6 @@ Cinci abordări pentru detecția și localizarea obiectelor vor fi analizate și
 \end{itemize}
 
 \subsubsection{RCNN}
-\url{https://towardsdatascience.com/r-cnn-fast-r-cnn-faster-r-cnn-yolo-object-detection-algorithms-36d53571365e}
 Când se face detectarea obiectelor o problemă cu care ne întâlnim inevitabil este faptul că în majoritatea cazurilor nu o să fie numai un bounding box pentru o scenă pentru că imaginea respectivă poate să conțină numeroase obiecte de interes și nu putem să știm dinainte câte. Din acest motiv nu putem să folosim o rețea neuronală standard extinsă cu un strat fully connected.\newline
 RCNN (Regions + CNN) este o metodă care se bazează pe o metodă externă de propunere de regiuni care găsește regiunile de interes, și le găsește repede. Algoritmul extern de propunere de regiuni se numește \textit{selective search}.\newline
 Chiar și accelerând pasul de generare de regiuni de interes, problema cu RCNN este că nu este destul de rapid.\newline
@@ -72,7 +69,6 @@ RCNN are și câteva dezavantaje:
 \end{itemize}
 
 \subsubsection{Fast RCNN}
-\url{https://towardsdatascience.com/r-cnn-fast-r-cnn-faster-r-cnn-yolo-object-detection-algorithms-36d53571365e}
 Autorii articolului de RCNN au rezolvat câteva din problemele modelului RCNN pentru a construi un algoritm mai rapid pentru detectarea obiectelor. Acest algoritm îmbunătăți se numește Fast RCNN și este similar cu RCNN. Însă în loc de introducerea propunerilor de regiuni într-un CNN, se introduc imaginile în CNN pentru a genera o hartă de trăsături extrase cu o rețea convoluțională. Din această mapă identificăm propunerile de regiuni și folosim un strat softmax pentru a produce predicții de clasificare pentru regiuni.\newline
 Fast RCNN este mai rapid decât predecesorul lui pentru că nu trebuie să introducem 2000 propuneri de regiuni în rețeaua convoluțională de fiecare dată; în schimb operația de convoluție se face o dată per imagine, pentru a genera harta trăsăturilor convoluționale.
 
@@ -166,10 +162,6 @@ Această ieșire de 7x7 poate fi considerată ca un grid de 7x7 reprezentând im
 \end{figure}
 
 În ultimul pas folosind \textit{thresholding} și \textit{non-maxima suppression} putem filtra regiunile care nu sunt detectări valide.
-
-
-More about YOLO if needed only
-\url{https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/single-shot-detectors/yolo.html}
 
 \subsubsection{Multibox Single Shot Detector (SSD)}	
 Detectorul SSD diferă de alte detectoare single-shot prin folosirea mai multor straturi care asigură o acuratețe mai bună în cazul obiectelor de mărimi diferente (cum straturile devin mai "adânci", ei sunt capabile de a observa obiecte mai mari).\newline

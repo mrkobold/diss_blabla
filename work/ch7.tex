@@ -2,25 +2,16 @@
 \chapter{Conluzii}
 \label{cap:concluzii}
 
-Cuprinde:
 
-\begin{itemize}
- \item un rezumat al contribuțiilor aduse: ce s-a realizat, relativ la ce s-a propus, în ce constă experiența acumulată, care au fost punctele dificile atinse și rezolvată, recomandări pentru alții care abordează tema, la ce este bun ce s-a obținut etc.
- 
- \item a analiză critică a rezultatelor obținute: avantaje, dezavantaje, limitări
- 
- \item o descriere a posibilelor dezvoltări și îmbunătățiri ulterioare
-\end{itemize}
-
-Poate fi organizat pe secțiuni, dacă se dorește.
-
-Se întinde pe aproximativ 1-2 pagini. 
+\subsection{Realizări}
+S-a realizat prezentarea detaliată a rețelelor neuronale, acestea fiind cele mai capabile modele folosite în domeniul detectării obiectelor și segmentării semantice a imaginilor. Am văzut cum se comportă blocul de construcție a rețelei: \textit{neuronul}, și cum se construiește rețeaua alcătuită din neuroni care sunt organizate în straturi și au "legături'' ponderate. Metodele de învățare forward propagation și backwards propagation au fost prezentate.\newline
+După aceasta am văzut cum funcționează rețelele neuronale specifice domeniului viziunii artificiale (straturile speciale a acestora fiind prezentate).\newline
+S-a făcut prezentarea comparativă a diferitelor metode de detectare de obiecte, și am construit o rețea bazându-se pe modelul YOLO (You Only Look Once).
 
 
-
-
-
-
-
-
-
+\subsection{Îmbunătățiri posibile}
+Câteva îmbunătățiri ar putea fi aduse:
+\begin{enumerate}
+	\item pentru rețeaua dezvoltată s-ar putea implementa un algoritm mai bun de non-maximum suppression. Acest lucru ar îmbunătăți metoda de calculare a costului la faza de antrenare a rețelei, astfel rețeaua ar putea să-și ajusteze ponderile într-un mod care ar duce la acuratețe mai mare (IoU și mAP ar fi mai mari)
+	\item o altă îmbunătățire ar fi să facem rețeaua noastră capabilă să facă detectare de obiecte pe un stream video (momentan fiind capabil de a încărca imagini dintr-un fișier)
+\end{enumerate}
